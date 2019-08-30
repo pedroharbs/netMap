@@ -1,32 +1,21 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate')
+const Joi = require('joi')
+const joigoose = require('joigoose')('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth')
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  schoolRecord : {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+const JoiUserSchema = Joi.object().keys({
+    name: Joi.string().required(),
+    schoolRecord: Joi.string().required().min(8),
+    level: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required().regex(/(?=.*[}{,.^?~=+\-_\/*\-+.%$&\@!()#|])(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/),
+    createdAt: Joi.date().required().default(Date.now, 'current date')
 })
+
+const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema))
 
 // Hook acontecendo antes de todo save do usuário(criação e update)
 UserSchema.pre(('save'), async function (next) {
@@ -44,6 +33,10 @@ UserSchema.methods = {
   // Recebe senha criptografada e compara se ela bate com a senha dentro da instância do usuário
   compareHash (password) {
     return bcrypt.compare(password, this.password)
+  },
+
+  verifyLevel (id) {
+    return JSON(id.level)
   }
 }
 
@@ -55,4 +48,7 @@ UserSchema.statics = {
     })
   }
 }
+
+UserSchema.plugin(mongoosePaginate)
+
 module.exports = mongoose.model('User', UserSchema)
