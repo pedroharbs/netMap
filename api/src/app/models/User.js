@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth')
 
+// Schema utilizando joigoose
 const JoiUserSchema = Joi.object().keys({
     name: Joi.string().required(),
     schoolRecord: Joi.string().required().min(8),
@@ -15,6 +16,7 @@ const JoiUserSchema = Joi.object().keys({
     createdAt: Joi.date().required().default(Date.now, 'current date')
 })
 
+// Conversão do schema de joi para mongoose
 const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema))
 
 // Hook acontecendo antes de todo save do usuário(criação e update)
@@ -34,16 +36,12 @@ UserSchema.methods = {
   compareHash (password) {
     return bcrypt.compare(password, this.password)
   },
-
-  verifyLevel (id) {
-    return JSON(id.level)
-  }
 }
 
 // Método estático do model User
 UserSchema.statics = {
-  generateToken ({ id }) {
-    return jwt.sign({ id }, authConfig.secret, {
+  generateToken ({ id, level }) {
+    return jwt.sign({ id, level }, authConfig.secret, {
       expiresIn: authConfig.ttl
     })
   }

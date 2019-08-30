@@ -17,7 +17,7 @@ class SessionController {
         message: 'Password incorrect' 
       })
     }
-
+    
     return res.json({ 
       auth: true,
       token : User.generateToken(user) 

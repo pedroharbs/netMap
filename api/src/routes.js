@@ -6,6 +6,7 @@ const routes = express.Router()
  */
 
 const PrimeiroLogin = require('./app/middlewares/PrimeiroLogin')
+const AuthMiddleware = require('./app/middlewares/AuthMiddleware')
 
 /**
  * Controllers
@@ -19,10 +20,13 @@ const UserController = require('./app/controllers/UserController')
  */
 
 routes.post('/createSession', PrimeiroLogin, SessionController.store)
+
+// Rotas daqui para baixo passarão pelo middleware de verificação de usuário
+routes.use(AuthMiddleware)
+
+routes.put('/updateUser/:id', UserController.update)
 routes.post('/createUser', UserController.store)
 routes.get('/listUsers', UserController.index)
 routes.delete('/deleteUser/:id', UserController.destroy)
-routes.put('/updateUser/:id', UserController.update)
-
 
 module.exports = routes
