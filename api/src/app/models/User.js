@@ -13,11 +13,14 @@ const JoiUserSchema = Joi.object().keys({
     level: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required().regex(/(?=.*[}{,.^?~=+\-_\/*\-+.%$&\@!()#|])(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/),
+    passwordResetToken: Joi.string(),
+    passwordResetExpires: Joi.date(),
     createdAt: Joi.date().required().default(Date.now, 'current date')
 })
 
 // Conversão do schema de joi para mongoose
 const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema))
+
 
 // Hook acontecendo antes de todo save do usuário(criação e update)
 UserSchema.pre(('save'), async function (next) {

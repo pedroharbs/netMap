@@ -7,6 +7,7 @@ class UserController {
     const users = await User.paginate({}, {
       page: req.query.page || 1,
       limit: 20,
+      select: 'schoolRecord name email level createdAt',
       sort: '-createdAt'
     })
 
@@ -36,6 +37,10 @@ class UserController {
         return res.json(err || result)
       })
     }
+
+    return res.status(401).json({ 
+      message: 'Permission denied.' 
+    })
   }
 
   async update (req, res) {
@@ -48,6 +53,10 @@ class UserController {
         message: 'User updated succesfully.'
       })
     }
+
+    return res.status(401).json({ 
+      message: 'Permission denied.' 
+    })
   }
 
   async destroy (req, res) {
@@ -58,6 +67,10 @@ class UserController {
         message: 'User deleted succesfully.'
       })
     }
+
+    return res.status(401).json({ 
+      message: 'Permission denied.' 
+    })
   }
 }
 

@@ -14,12 +14,15 @@ const AuthMiddleware = require('./app/middlewares/AuthMiddleware')
 
 const SessionController = require('./app/controllers/SessionController')
 const UserController = require('./app/controllers/UserController')
+const ResetPasswordController = require('./app/controllers/ResetPasswordController')
 
 /**
  * User Routes
  */
 
 routes.post('/createSession', PrimeiroLogin, SessionController.store)
+routes.post('/forgotPassword', ResetPasswordController.store)
+routes.post('/resetPassword', ResetPasswordController.update)
 
 // Rotas daqui para baixo passarão pelo middleware de verificação de usuário
 routes.use(AuthMiddleware)
