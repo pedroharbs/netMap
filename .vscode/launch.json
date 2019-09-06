@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}\\api\\src\\app\\middlewares\\PrimeiroLogin.js"
+      "program": "${workspaceFolder}\\api\\src\\index.js"
     }
   ]
 }

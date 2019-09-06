@@ -12,11 +12,11 @@ class ResetPasswordMail {
       from: '"netMap" , <netmap@ifsp.edu.br>',
       to: user.email,
       subject: 'Solicitação de Recuperação de senha netMap',
-      template: 'ResetPasswordMail',
+      template: 'resetPasswordMail',
       context: { user, token }
     }, (err, info) => {
       if (err)
-        return res.status(401).json({ message: 'Cannot send forgot password email.' })
+        return send.status(401).json({ message: 'Cannot send forgot password email.' })
     })
 
     return done()

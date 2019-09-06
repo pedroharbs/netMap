@@ -36,11 +36,11 @@ class UserController {
       user.save(function (err, result) {
         return res.json(err || result)
       })
+    } else {
+      return res.status(401).json({ 
+        message: 'Permission denied.' 
+      })
     }
-
-    return res.status(401).json({ 
-      message: 'Permission denied.' 
-    })
   }
 
   async update (req, res) {

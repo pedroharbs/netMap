@@ -22,7 +22,7 @@ const ResetPasswordController = require('./app/controllers/ResetPasswordControll
 
 routes.post('/createSession', PrimeiroLogin, SessionController.store)
 routes.post('/forgotPassword', ResetPasswordController.store)
-routes.post('/resetPassword', ResetPasswordController.update)
+routes.post('/resetPassword/:token', ResetPasswordController.update)
 
 // Rotas daqui para baixo passarão pelo middleware de verificação de usuário
 routes.use(AuthMiddleware)

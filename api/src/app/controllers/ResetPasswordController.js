@@ -61,7 +61,7 @@ class ResetPasswordController {
     // Resultado validação
     const resultForgottenData = schemaForgottenPassword.validate({ 
       email: req.body.email, 
-      token: req.body.token,
+      token: req.params.token,
       password: req.body.password
     }, async (err, result) => {
       
@@ -79,7 +79,6 @@ class ResetPasswordController {
           })
         }
         
-        console.log(userReset)
         if (token !== userReset.passwordResetToken){
           return res.status(400).json({ 
             message: 'Token invalid.'
