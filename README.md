@@ -2,10 +2,18 @@
 
 Sistema para gerenciamente e mapeamento de redes, desenvolvido como avaliação da disciplina Projeto Integrado II do Curso de Análise e Desenvolvimento de Sistemas(ADS) do IFSP - Campus Barretos.
 
-### .ENV FILE
+## Requirements
+
+Database redis and mongo
+
+Install with docker
 
 ```shell
-Create a .env file in the root of your project, with the following content
+sudo docker run -d --name redis -p 6379:6379 redis
+sudo docker run -d --name mongoDB -p 27017:27017 mongo
+```
+```shell
+Create a .env file in the api dir, with the following content
 ```
 
 ```bash
@@ -26,3 +34,16 @@ MAIL_USER=YOUR_SMTP_USER
 MAIL_PASS=YOUR_SMTP_PASS
 MAIL_SECURE=false or true
 ```
+
+## Dependencies
+
+```shell
+yarn install
+```
+
+## Test
+
+```shell
+yarn start 
+```
+
