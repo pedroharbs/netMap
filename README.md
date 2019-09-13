@@ -4,9 +4,22 @@ Sistema para gerenciamente e mapeamento de redes, desenvolvido como avaliação 
 
 ## Requirements
 
-Database redis and mongo
+Node, Yarn, Database redis and mongo
 
-Install with docker
+```shell
+Node Install: 
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash 
+sudo apt install nodejs
+```
+
+```shell
+Yarn Install: 
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+```
+
+Install Redis and MongoDB with docker
 
 ```shell
 sudo docker run -d --name redis -p 6379:6379 redis
@@ -44,6 +57,16 @@ yarn install
 ## Test
 
 ```shell
-yarn start 
+To start API
+
+cd api
+yarn start
+
+----------
+
+To start Frontend
+
+cd frontend
+yarn start
 ```
 
