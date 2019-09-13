@@ -2,7 +2,24 @@
 
 Sistema para gerenciamente e mapeamento de redes, desenvolvido como avaliação da disciplina Projeto Integrado II do Curso de Análise e Desenvolvimento de Sistemas(ADS) do IFSP - Campus Barretos.
 
-## Requirements
+
+## Requirements 
+
+Steps through windows:
+
+Node LTS Version: https://nodejs.org/en/download/
+&nbsp;&nbsp;
+
+
+Yarn: https://yarnpkg.com/en/docs/install#windows-stable
+&nbsp;&nbsp;
+
+
+Docker: https://hub.docker.com/?overlay=onboarding
+
+After everything is installed, you can skip installation via linux and continue from the installation part of mongo and redis with docker.
+
+Steps through Linux:
 
 Node, Yarn, Database redis and mongo
 
