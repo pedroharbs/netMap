@@ -15,7 +15,7 @@ class UserController {
   }
 
   async store (req, res) {
-    if (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador') {
+    if (req.firstLogin || (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador')) {
 
       const { email } = req.body
 

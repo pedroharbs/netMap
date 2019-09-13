@@ -61,10 +61,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login({ history }) {
+  
+  async function handleLoad(){
+    const firstLogin = await Api.post("/createSession", {
+      email : 'first@login.com',
+      password : 'firstPassword@1931'
+    });
+    
+    if(firstLogin.data.code == 0){
+      history.push(`/firstAccess`);
+    }
+  }
+
+  handleLoad();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const classes = useStyles();
-
+  
   //Verifica se useState esta guardando username, precisa add onSubmit={handleSubmit} no form ou no input
   async function handleSubmit(e) {
     e.preventDefault();
