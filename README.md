@@ -79,11 +79,15 @@ To start API
 cd api
 yarn start
 
+Backend URL: http://localhost:3000/
+
 ----------
 
 To start Frontend
 
 cd frontend
 yarn start
+
+Frontend URL: http://localhost:3333/
 ```
 
