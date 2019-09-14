@@ -17,9 +17,9 @@ class UserController {
   async store (req, res) {
     if (req.firstLogin || (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador')) {
 
-      const { email } = req.body
+      const { schoolRecord } = req.body
 
-      if (await User.findOne({ email })){
+      if (await User.findOne({ schoolRecord })){
         return res.status(400).json({ 
           error: 'User already exists.'
         })
@@ -34,7 +34,7 @@ class UserController {
       })
 
       user.save(function (err, result) {
-        return res.json(err || result)
+        return res.json(err || { message: 'User created.' })
       })
     } else {
       return res.status(401).json({ 

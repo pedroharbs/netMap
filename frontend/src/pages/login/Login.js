@@ -11,9 +11,55 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import Logo from "../../assets/logo.png";
+import Snackbar from '@material-ui/core/Snackbar';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import { green } from '@material-ui/core/colors';
+import IconButton from '@material-ui/core/IconButton';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
+import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
+
+const variantIcon = {
+  success: CheckCircleIcon,
+  error: ErrorIcon,
+};
+
+function MySnackbarContentWrapper(props) {
+  const classes = useStyles1();
+  const { className, message, onClose, variant, ...other } = props;
+  const Icon = variantIcon[variant];
+
+  return (
+    <SnackbarContent
+      className={clsx(classes[variant], className)}
+      aria-describedby="client-snackbar"
+      message={
+        <span id="client-snackbar" className={classes.message}>
+          <Icon className={clsx(classes.icon, classes.iconVariant)} />
+          {message}
+        </span>
+      }
+      action={[
+        <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+          <CloseIcon className={classes.icon} />
+        </IconButton>,
+      ]}
+      {...other}
+    />
+  );
+}
+
+MySnackbarContentWrapper.propTypes = {
+  className: PropTypes.string,
+  message: PropTypes.string,
+  onClose: PropTypes.func,
+  variant: PropTypes.oneOf(['error', 'success']).isRequired,
+};
 
 function Copyright() {
   return (
@@ -60,11 +106,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const useStyles1 = makeStyles(theme => ({
+  success: {
+    backgroundColor: green[600],
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  icon: {
+    fontSize: 20,
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing(1),
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
+
 export default function Login({ history }) {
   
   async function handleLoad(){
     const firstLogin = await Api.post("/createSession", {
-      email : 'first@login.com',
+      schoolRecord : 'BA1798839',
       password : 'firstPassword@1931'
     });
     
@@ -75,8 +141,23 @@ export default function Login({ history }) {
 
   handleLoad();
   
-  const [email, setEmail] = useState("");
+  function handleClick() {
+    setOpen(true);
+  }
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  }
+
+  const [schoolRecord, setSchoolRecord] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [messageSnack, setmessageSnack] = useState("")
+
   const classes = useStyles();
   
   //Verifica se useState esta guardando username, precisa add onSubmit={handleSubmit} no form ou no input
@@ -85,17 +166,31 @@ export default function Login({ history }) {
 
     //realiza requisição post a API
     const response = await Api.post("/createSession", {
-      email,
+      schoolRecord,
       password
     });
 
-    console.log(response.data);
+    if(response.data.auth == true){
+      setmessageSnack({ message: 'Logado com sucesso.', variant: 'success'})
+    } else if(response.data.message == 'User not found.'){
+      setmessageSnack({ message: 'Prontuário não encontrado.', variant: 'error'})
+    } else if(response.data.message == 'Password incorrect'){
+      setmessageSnack({ message: 'Senha inválida.', variant: 'error'})
+    }
+    handleClick();
 
-    //vem da herança de history para realizar a navegação
-    history.push(`/home`);
+    setTimeout(function(){
+      handleClose();
+
+      if(response.data.auth == true){
+        history.push(`/home`);
+      }
+    }, 2000)
+
   }
 
   return (
+    <>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -106,13 +201,13 @@ export default function Login({ history }) {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="E-mail"
-            name="email"
-            autoComplete="email"
+            id="schoolRecord"
+            label="Prontuário"
+            name="schoolRecord"
+            autoComplete="schoolRecord"
             autoFocus
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={schoolRecord}
+            onChange={e => setSchoolRecord(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -127,10 +222,6 @@ export default function Login({ history }) {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Lembrar-me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -142,7 +233,7 @@ export default function Login({ history }) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link className={classes.linkSenha} href="#" variant="body2">
+              <Link className={classes.linkSenha} href="/lostPassword" variant="body2">
                 Esqueceu a senha?
               </Link>
             </Grid>
@@ -153,5 +244,21 @@ export default function Login({ history }) {
         <Copyright />
       </Box>
     </Container>
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <MySnackbarContentWrapper
+        onClose={handleClose}
+        variant={messageSnack.variant}
+        message={messageSnack.message}
+      />
+    </Snackbar>
+    </>
   );
 }

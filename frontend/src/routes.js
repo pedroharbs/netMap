@@ -12,7 +12,7 @@ export default function Routes() {
       <Route path="/" exact component={Login} />
       <Route path="/firstAccess" exact component={Register} />
       <Route path="/lostPassword" exact component={LostPassword} />
-      <Route path="/resetPassword" exact component={ResetPassword} />
+      <Route path="/resetPassword/:token" exact component={ResetPassword} />
     </BrowserRouter>
   );
 }

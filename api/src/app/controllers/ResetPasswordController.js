@@ -25,7 +25,7 @@ class ResetPasswordController {
         const userForgot = await User.findOne({ email })
         
         if (!userForgot) {
-          return res.status(400).json({ message: 'User not found.' })
+          return res.status(200).json({ message: 'User not found.' })
         }
 
         const token = crypto.randomBytes(20).toString('hex')
@@ -74,13 +74,13 @@ class ResetPasswordController {
         .select('passwordResetToken passwordResetExpires')
         
         if (!userReset) {
-          return res.status(400).json({ 
+          return res.status(200).json({ 
             message: 'User not found.' 
           })
         }
         
         if (token !== userReset.passwordResetToken){
-          return res.status(400).json({ 
+          return res.status(200).json({ 
             message: 'Token invalid.'
           })
         }
@@ -88,7 +88,7 @@ class ResetPasswordController {
         const now = new Date()
 
         if (now > userReset.passwordResetExpires){
-          return res.status(400).json({ 
+          return res.status(200).json({ 
             message: 'Token expired, generate a new one.' 
           })
         }
