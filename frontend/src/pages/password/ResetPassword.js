@@ -160,6 +160,8 @@ export default function LostPassword({ history }) {
       setmessageSnack({ message: 'Token inválido.', variant: 'error'})
     } else if(response.data.message == 'Token expired, generate a new one.'){
       setmessageSnack({ message: 'Token expirado.', variant: 'error'})
+    } else if(response.data.message == undefined){
+      setmessageSnack({ message: 'Senha inválida.', variant: 'error'})
     }
 
     handleClick();
