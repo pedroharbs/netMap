@@ -4,16 +4,30 @@ Sistema para gerenciamente e mapeamento de redes, desenvolvido como avaliação 
 
 ## Requirements
 
+Steps through windows:
+
+Node LTS Version: https://nodejs.org/en/download/
+&nbsp;&nbsp;
+
+Yarn: https://yarnpkg.com/en/docs/install#windows-stable
+&nbsp;&nbsp;
+
+Docker: https://hub.docker.com/?overlay=onboarding
+
+After everything is installed, you can skip installation via linux and continue from the installation part of mongo and redis with docker.
+
+Steps through Linux:
+
 Node, Yarn, Database redis and mongo
 
 ```shell
-Node Install: 
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash 
+Node Install:
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash
 sudo apt install nodejs
 ```
 
 ```shell
-Yarn Install: 
+Yarn Install:
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update && sudo apt-get install yarn
@@ -25,6 +39,7 @@ Install Redis and MongoDB with docker
 sudo docker run -d --name redis -p 6379:6379 redis
 sudo docker run -d --name mongoDB -p 27017:27017 mongo
 ```
+
 ```shell
 Create a .env file in the api dir, with the following content
 ```
@@ -57,6 +72,19 @@ yarn install
 ## Test
 
 ```shell
-yarn start 
-```
+To start API
 
+cd api
+yarn start
+
+Backend URL: http://localhost:3000/
+
+----------
+
+To start Frontend
+
+cd frontend
+yarn start
+
+Frontend URL: http://localhost:3333/
+```
