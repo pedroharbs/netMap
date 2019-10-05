@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
-  Link,
   Grid,
   Box,
   Typography,
@@ -29,7 +28,7 @@ const Register = ({ history }) => {
     Api.get("isFirstAcess").then(response => {
       if (!response.data.isFirstAcess) history.push("/");
     });
-  }, []);
+  }, [history]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -59,7 +58,7 @@ const Register = ({ history }) => {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <img src={Logo} />
+        <img src={Logo} alt="logo" />
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

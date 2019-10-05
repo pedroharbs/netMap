@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
     next();
   } else {
     const authHeader = req.headers.authorization;
+
     if (!authHeader) {
       return res.status(401).send({
         auth: false,
@@ -38,7 +39,8 @@ module.exports = (req, res, next) => {
         return res.status(401).send({
           auth: false,
           message: "Token invalid.",
-          messageUi_PtBr: "Token inválido."
+          messageUi_PtBr: "Token inválido.",
+          error: err
         });
       }
 

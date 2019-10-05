@@ -5,7 +5,6 @@ import {
   Link,
   Grid,
   Box,
-  Typography,
   makeStyles,
   Container
 } from "@material-ui/core";
@@ -13,10 +12,10 @@ import {
 import { toast } from "react-toastify";
 
 import Copyright from "../../components/Copyright";
-
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
-import cookies from "../../cookies";
+import cookies from "../../utils/cookies";
+import authenticated from "../../utils/authenticated";
 
 const Login = ({ history }) => {
   const [recordId, setRecordId] = useState("");
@@ -29,8 +28,8 @@ const Login = ({ history }) => {
       if (response.data.isFirstAcess) history.push("/firstAccess");
     });
 
-    if (cookies.get("authCookie")) history.push("/dashboard");
-  }, []);
+    if (authenticated()) history.push("/dashboard");
+  }, [history]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -39,10 +38,10 @@ const Login = ({ history }) => {
       recordId,
       password
     })
-      .then(response => {
-        cookies.set("authCookie", response.data.token, { path: "/" }); //Add httpOnly option.
+      .then(async response => {
+        await cookies.set("authCookie", response.data.token, { path: "/" }); //Add httpOnly option.
         toast.success(response.data.messageUi_PtBr);
-        history.push("dashboard");
+        history.push("/dashboard");
       })
       .catch(error => {
         if (error.response) {
@@ -58,7 +57,7 @@ const Login = ({ history }) => {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <img src={Logo} />
+        <img src={Logo} alt="logo" />
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             name="recordId"

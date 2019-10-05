@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
-  Link,
   Grid,
   Box,
   Typography,
@@ -15,7 +14,7 @@ import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
 import Copyright from "../../components/Copyright";
 
-import cookies from "../../cookies";
+import cookies from "../../utils/cookies";
 
 const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -28,7 +27,7 @@ const ForgotPassword = ({ history }) => {
     });
 
     if (cookies.get("authCookie")) history.push("/dashboard");
-  }, []);
+  }, [history]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,7 +52,7 @@ const ForgotPassword = ({ history }) => {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <img src={Logo} />
+        <img src={Logo} alt="logo" />
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

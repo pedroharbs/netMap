@@ -6,6 +6,7 @@ const routes = express.Router();
  */
 
 const Auth = require("./app/middlewares/Auth");
+const isAuth = require("./app/middlewares/isAuth");
 const FirstAcess = require("./app/middlewares/FirstAcess");
 const isFirstAcess = require("./app/middlewares/isFirstAcess");
 
@@ -23,7 +24,7 @@ const ResetPasswordController = require("./app/controllers/ResetPasswordControll
 
 routes.post("/firstAcess", FirstAcess, Auth, UserController.store);
 routes.get("/isFirstAcess", isFirstAcess);
-routes.get("/authenticated", Auth);
+routes.get("/authenticated", Auth, isAuth);
 routes.post("/createSession", SessionController.store);
 routes.post("/forgotPassword", ResetPasswordController.store);
 routes.post("/resetPassword", ResetPasswordController.update);
