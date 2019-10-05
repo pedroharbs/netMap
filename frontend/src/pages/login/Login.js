@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  TextField,
-  Link,
-  Grid,
-  Box,
-  makeStyles,
-  Container
-} from "@material-ui/core";
-
-import { toast } from "react-toastify";
-
-import Copyright from "../../components/Copyright";
-import Logo from "../../assets/logo.png";
-import Api from "../../services/Api";
-import cookies from "../../utils/cookies";
-import authenticated from "../../utils/authenticated";
-=======
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -43,7 +23,6 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
->>>>>>> master
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -166,15 +145,10 @@ export default function Login({ history }) {
     setOpen(true);
   }
 
-<<<<<<< HEAD
-    if (authenticated()) history.push("/dashboard");
-  }, [history]);
-=======
   function handleClose(event, reason) {
     if (reason === 'clickaway') {
       return;
     }
->>>>>>> master
 
     setOpen(false);
   }
@@ -194,23 +168,6 @@ export default function Login({ history }) {
     const response = await Api.post("/createSession", {
       schoolRecord,
       password
-<<<<<<< HEAD
-    })
-      .then(async response => {
-        await cookies.set("authCookie", response.data.token, { path: "/" }); //Add httpOnly option.
-        toast.success(response.data.messageUi_PtBr);
-        history.push("/dashboard");
-      })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
-=======
     });
 
     if(response.data.auth == true){
@@ -230,7 +187,6 @@ export default function Login({ history }) {
       }
     }, 2000)
 
->>>>>>> master
   }
 
   return (
@@ -238,7 +194,7 @@ export default function Login({ history }) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src={Logo} alt="logo" />
+        <img src={Logo} />
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
