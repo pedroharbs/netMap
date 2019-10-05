@@ -22,8 +22,6 @@ const ResetPassword = ({ history, match }) => {
 
   const classes = useStyles();
 
-  console.log(match);
-
   useEffect(() => {
     Api.get("isFirstAcess").then(response => {
       if (response.data.isFirstAcess) history.push("/firstAccess");
