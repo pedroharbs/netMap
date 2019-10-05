@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+  Container
+} from "@material-ui/core";
+import { toast } from "react-toastify";
+=======
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -18,10 +31,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import { green } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+>>>>>>> master
 
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
 
+<<<<<<< HEAD
+import cookies from "../../utils/cookies";
+=======
 const variantIcon = {
   success: CheckCircleIcon,
   error: ErrorIcon,
@@ -120,6 +137,7 @@ const useStyles1 = makeStyles(theme => ({
     alignItems: 'center',
   },
 }));
+>>>>>>> master
 
 export default function LostPassword({ history }) {
   const [password, setPassword] = useState("");
@@ -137,8 +155,13 @@ export default function LostPassword({ history }) {
       return;
     }
 
+<<<<<<< HEAD
+    if (cookies.get("authCookie")) history.push("/dashboard");
+  }, [history]);
+=======
     setOpen(false);
   }
+>>>>>>> master
 
   async function handleLostPassword(e) {
     e.preventDefault();
@@ -180,8 +203,13 @@ export default function LostPassword({ history }) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+<<<<<<< HEAD
+        <img src={Logo} alt="logo" />
+        <form className={classes.form} onSubmit={handleSubmit}>
+=======
         <img src={Logo} />
         <form className={classes.form} onSubmit={handleLostPassword}>
+>>>>>>> master
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="p" component="p" align="center">

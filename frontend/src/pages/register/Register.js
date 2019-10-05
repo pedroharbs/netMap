@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+  Container
+} from "@material-ui/core";
+
+import { toast } from "react-toastify";
+
+import Copyright from "../../components/Copyright";
+=======
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -18,6 +34,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { green } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+>>>>>>> master
 
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
@@ -130,6 +147,13 @@ export default function Register({ history }) {
   const [messageSnack, setmessageSnack] = useState("")
   const classes = useStyles();
 
+<<<<<<< HEAD
+  useEffect(() => {
+    Api.get("isFirstAcess").then(response => {
+      if (!response.data.isFirstAcess) history.push("/");
+    });
+  }, [history]);
+=======
   function handleClick() {
     setOpen(true);
   }
@@ -141,6 +165,7 @@ export default function Register({ history }) {
 
     setOpen(false);
   }
+>>>>>>> master
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -182,8 +207,13 @@ export default function Register({ history }) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+<<<<<<< HEAD
+        <img src={Logo} alt="logo" />
+        <form className={classes.form} onSubmit={handleSubmit}>
+=======
         <img src={Logo} />
         <form className={classes.form} onSubmit={handleRegister}>
+>>>>>>> master
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="p" component="p" align="center">
