@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -16,12 +16,21 @@ import Copyright from "../../components/Copyright";
 
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
+import cookies from "../../cookies";
 
 const Login = ({ history }) => {
   const [recordId, setRecordId] = useState("");
   const [password, setPassword] = useState("");
 
   const classes = useStyles();
+
+  useEffect(() => {
+    Api.get("isFirstAcess").then(response => {
+      if (response.data.isFirstAcess) history.push("/firstAccess");
+    });
+
+    if (cookies.get("authCookie")) history.push("/dashboard");
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,6 +40,7 @@ const Login = ({ history }) => {
       password
     })
       .then(response => {
+        cookies.set("authCookie", response.data.token, { path: "/" }); //Add httpOnly option.
         toast.success(response.data.messageUi_PtBr);
         history.push("dashboard");
       })

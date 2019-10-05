@@ -5,7 +5,7 @@ const routes = express.Router();
  * Middlewares
  */
 
-const AuthMiddleware = require("./app/middlewares/AuthMiddleware");
+const Auth = require("./app/middlewares/Auth");
 const FirstAcess = require("./app/middlewares/FirstAcess");
 const isFirstAcess = require("./app/middlewares/isFirstAcess");
 
@@ -21,13 +21,14 @@ const ResetPasswordController = require("./app/controllers/ResetPasswordControll
  * User Routes
  */
 
-routes.post("/firstAcess", FirstAcess, AuthMiddleware, UserController.store);
+routes.post("/firstAcess", FirstAcess, Auth, UserController.store);
 routes.get("/isFirstAcess", isFirstAcess);
+routes.get("/authenticated", Auth);
 routes.post("/createSession", SessionController.store);
 routes.post("/forgotPassword", ResetPasswordController.store);
-routes.post("/resetPassword/:token", ResetPasswordController.update);
+routes.post("/resetPassword", ResetPasswordController.update);
 
-routes.use(AuthMiddleware);
+routes.use(Auth);
 
 routes.put("/updateUser/:id", UserController.update);
 routes.post("/createUser", UserController.store);

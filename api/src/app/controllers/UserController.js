@@ -32,7 +32,7 @@ class UserController {
         password: req.body.password
       });
 
-      user.save((err, result) => {
+      await user.save(err => {
         if (err) {
           return res.status(400).json({
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",

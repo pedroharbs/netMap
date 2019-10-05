@@ -9,41 +9,35 @@ import {
   makeStyles,
   Container
 } from "@material-ui/core";
-
 import { toast } from "react-toastify";
-
-import Copyright from "../../components/Copyright";
 
 import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
+import Copyright from "../../components/Copyright";
 
-const Register = ({ history }) => {
-  const [name, setName] = useState("");
+import cookies from "../../cookies";
+
+const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [recordId, setRecord] = useState("");
 
   const classes = useStyles();
 
   useEffect(() => {
     Api.get("isFirstAcess").then(response => {
-      if (!response.data.isFirstAcess) history.push("/");
+      if (response.data.isFirstAcess) history.push("/firstAccess");
     });
+
+    if (cookies.get("authCookie")) history.push("/dashboard");
   }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    Api.post("/firstAcess", {
-      name,
-      recordId,
-      level: "Administrador",
-      email,
-      password
+    Api.post("/forgotPassword", {
+      email
     })
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
-        history.push("/");
       })
       .catch(error => {
         if (error.response) {
@@ -63,21 +57,9 @@ const Register = ({ history }) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography component="p" align="center">
-                Crie sua credencial para o primeiro acesso ao sistema.
+              <Typography align="center">
+                Informe seu e-mail para redefinir a senha.
               </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                label="Nome"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                autoFocus
-              />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -90,29 +72,6 @@ const Register = ({ history }) => {
                 onChange={e => setEmail(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="recordId"
-                variant="outlined"
-                required
-                fullWidth
-                label="Prontuário"
-                value={recordId}
-                onChange={e => setRecord(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="password"
-                variant="outlined"
-                required
-                fullWidth
-                label="Senha"
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -121,7 +80,7 @@ const Register = ({ history }) => {
             color="primary"
             className={classes.submit}
           >
-            Iniciar sistema
+            Enviar e-mail
           </Button>
         </form>
       </div>
@@ -132,7 +91,7 @@ const Register = ({ history }) => {
   );
 };
 
-export default Register;
+export default ForgotPassword;
 
 const useStyles = makeStyles(theme => ({
   "@global": {
