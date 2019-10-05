@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Logo from "../../assets/logo.png";
 
 import Snackbar from '@material-ui/core/Snackbar';
 import PropTypes from 'prop-types';
@@ -19,8 +20,8 @@ import { green } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-import Logo from "../../assets/logo.png";
 import Api from "../../services/Api";
+import { FormControlLabel } from "@material-ui/core";
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -122,12 +123,12 @@ const useStyles1 = makeStyles(theme => ({
 }));
 
 export default function LostPassword({ history }) {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("")
+  
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [messageSnack, setmessageSnack] = useState("")
-  const classes = useStyles();
-
+  
   function handleClick() {
     setOpen(true);
   }
@@ -143,36 +144,21 @@ export default function LostPassword({ history }) {
   async function handleLostPassword(e) {
     e.preventDefault();
 
-    const urlAtual = window.location.pathname
-    
-    const response = await Api.post(urlAtual, {
-      email,
-      password
+    const response = await Api.post("/forgotPassword", {
+      email
     });
 
-    console.log(response.data.message);
-
-    if(response.data.message == 'Password changed successfully.'){
-      setmessageSnack({ message: 'Senha alterada com sucesso!', variant: 'success'})
+    if(response.data.message == 'Password recovery email sent successfully.'){
+      setmessageSnack({ message: 'E-mail enviado com sucesso.', variant: 'success'})
     } else if(response.data.message == 'User not found.'){
-      setmessageSnack({ message: 'Usuário não existe.', variant: 'error'})
-    } else if(response.data.message == 'Token invalid.'){
-      setmessageSnack({ message: 'Token inválido.', variant: 'error'})
-    } else if(response.data.message == 'Token expired, generate a new one.'){
-      setmessageSnack({ message: 'Token expirado.', variant: 'error'})
-    } else if(response.data.message == undefined){
-      setmessageSnack({ message: 'Senha inválida.', variant: 'error'})
+      setmessageSnack({ message: 'E-mail não encontrado.', variant: 'error'})
     }
-
     handleClick();
-  
+
     setTimeout(function(){
       handleClose();
-
-      if(response.data.message == 'Password changed successfully.'){
-        history.push(`/`);
-      }
-    }, 2000)
+    }, 3000)
+    
   }
 
   return (
@@ -185,7 +171,7 @@ export default function LostPassword({ history }) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="p" component="p" align="center">
-                Digite sua nova senha!
+                Esqueceu sua senha? Digite seu e-mail!
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -193,27 +179,12 @@ export default function LostPassword({ history }) {
                 variant="outlined"
                 required
                 fullWidth
-                name="email"
-                label="E-mail"
-                type="email"
                 id="email"
-                autoComplete="current-email"
+                label="E-mail"
+                name="email"
+                autoComplete="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Senha"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -233,20 +204,20 @@ export default function LostPassword({ history }) {
       </Box>
     </Container>
     <Snackbar
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    open={open}
-    autoHideDuration={6000}
-    onClose={handleClose}
-  >
-    <MySnackbarContentWrapper
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={open}
+      autoHideDuration={6000}
       onClose={handleClose}
-      variant={messageSnack.variant}
-      message={messageSnack.message}
-    />
-  </Snackbar>
+    >
+      <MySnackbarContentWrapper
+        onClose={handleClose}
+        variant={messageSnack.variant}
+        message={messageSnack.message}
+      />
+    </Snackbar>
     </>
   );
 }

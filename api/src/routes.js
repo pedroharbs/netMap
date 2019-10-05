@@ -1,38 +1,35 @@
-const express = require("express");
-const routes = express.Router();
+const express = require('express')
+const routes = express.Router()
 
 /**
  * Middlewares
  */
 
-const Auth = require("./app/middlewares/Auth");
-const FirstAcess = require("./app/middlewares/FirstAcess");
-const isFirstAcess = require("./app/middlewares/isFirstAcess");
+const PrimeiroLogin = require('./app/middlewares/PrimeiroLogin')
+const AuthMiddleware = require('./app/middlewares/AuthMiddleware')
 
 /**
  * Controllers
  */
 
-const SessionController = require("./app/controllers/SessionController");
-const UserController = require("./app/controllers/UserController");
-const ResetPasswordController = require("./app/controllers/ResetPasswordController");
+const SessionController = require('./app/controllers/SessionController')
+const UserController = require('./app/controllers/UserController')
+const ResetPasswordController = require('./app/controllers/ResetPasswordController')
 
 /**
  * User Routes
  */
 
-routes.post("/firstAcess", FirstAcess, Auth, UserController.store);
-routes.get("/isFirstAcess", isFirstAcess);
-routes.get("/authenticated", Auth);
-routes.post("/createSession", SessionController.store);
-routes.post("/forgotPassword", ResetPasswordController.store);
-routes.post("/resetPassword", ResetPasswordController.update);
+routes.post('/createSession', PrimeiroLogin, SessionController.store)
+routes.post('/forgotPassword', ResetPasswordController.store)
+routes.post('/resetPassword/:token', ResetPasswordController.update)
 
-routes.use(Auth);
+// Rotas daqui para baixo passarão pelo middleware de verificação de usuário
+routes.use(AuthMiddleware)
 
-routes.put("/updateUser/:id", UserController.update);
-routes.post("/createUser", UserController.store);
-routes.get("/listUsers", UserController.index);
-routes.delete("/deleteUser/:id", UserController.destroy);
+routes.put('/updateUser/:id', UserController.update)
+routes.post('/createUser', UserController.store)
+routes.get('/listUsers', UserController.index)
+routes.delete('/deleteUser/:id', UserController.destroy)
 
-module.exports = routes;
+module.exports = routes
