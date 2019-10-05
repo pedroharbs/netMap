@@ -1,87 +1,77 @@
-const User = require("../models/User");
+const User = require('../models/User')
 
 class UserController {
-  async index(req, res) {
-    const users = await User.paginate(
-      {},
-      {
-        page: req.query.page || 1,
-        limit: 20,
-        select: "record name email level createdAt",
-        sort: "-createdAt"
-      }
-    );
 
-    return res.json(users);
+  async index (req, res) {
+    //Realiza paginação da resposta
+    const users = await User.paginate({}, {
+      page: req.query.page || 1,
+      limit: 20,
+      select: 'schoolRecord name email level createdAt',
+      sort: '-createdAt'
+    })
+
+    return res.json(users)
   }
 
-  async store(req, res) {
-    if (req.body.level == "Administrador") {
-      if (await User.findOne(req.body)) {
-        return res.status(403).json({
-          message: "User already exists.",
-          messageUi_PtBr: "Usuário já cadastrado."
-        });
+  async store (req, res) {
+    if (req.firstLogin || (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador')) {
+
+      const { schoolRecord } = req.body
+
+      if (await User.findOne({ schoolRecord })){
+        return res.status(400).json({ 
+          error: 'User already exists.'
+        })
       }
 
       const user = new User({
         name: req.body.name,
-        recordId: req.body.recordId,
+        schoolRecord: req.body.schoolRecord,
         level: req.body.level,
         email: req.body.email,
-        password: req.body.password
-      });
+        password: req.body.password,
+      })
 
-      await user.save(err => {
-        if (err) {
-          return res.status(400).json({
-            messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
-          });
-        }
-
-        return res.status(201).json({
-          message: "User created.",
-          messageUi_PtBr: "Bem vindo ao netMap!"
-        });
-      });
+      user.save(function (err, result) {
+        return res.json(err || { message: 'User created.' })
+      })
     } else {
-      return res.status(401).json({
-        message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
-      });
+      return res.status(401).json({ 
+        message: 'Permission denied.' 
+      })
     }
   }
 
-  async update(req, res) {
-    if (req.userLevel == "Administrador") {
+  async update (req, res) {
+    if (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador') {
       const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
-      });
+          new: true
+      })
 
-      return res.status(200).json({
-        message: "User updated succesfully."
-      });
+      return res.status(200).json({ 
+        message: 'User updated succesfully.'
+      })
     }
 
-    return res.status(401).json({
-      message: "Permission denied."
-    });
+    return res.status(401).json({ 
+      message: 'Permission denied.' 
+    })
   }
 
-  async destroy(req, res) {
-    if (req.userLevel == "Administrador") {
-      await User.findByIdAndDelete(req.params.id);
+  async destroy (req, res) {
+    if (req.userId != undefined && req.userId != '' && req.userLevel == 'Administrador') {
+      await User.findByIdAndDelete(req.params.id)
 
-      return res.status(200).json({
-        message: "User deleted succesfully."
-      });
+      return res.status(200).json({ 
+        message: 'User deleted succesfully.'
+      })
     }
 
-    return res.status(401).json({
-      message: "Permission denied."
-    });
+    return res.status(401).json({ 
+      message: 'Permission denied.' 
+    })
   }
 }
 
-module.exports = new UserController();
+module.exports = new UserController()
