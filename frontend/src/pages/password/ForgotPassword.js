@@ -16,8 +16,7 @@ import Copyright from "../../components/Copyright";
 
 import cookies from "../../utils/cookies";
 
-const ResetPassword = ({ history, match }) => {
-  const [password, setPassword] = useState("");
+const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
 
   const classes = useStyles();
@@ -30,19 +29,14 @@ const ResetPassword = ({ history, match }) => {
     if (cookies.get("authCookie")) history.push("/dashboard");
   }, [history]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    const token = match.params.token;
-
-    Api.post("/resetPassword", {
-      email,
-      password,
-      token
+    Api.post("/forgotPassword", {
+      email
     })
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
-        history.push("/");
       })
       .catch(error => {
         if (error.response) {
@@ -62,36 +56,19 @@ const ResetPassword = ({ history, match }) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="p" component="p" align="center">
-                Digite sua nova senha!
+              <Typography align="center">
+                Informe seu e-mail para redefinir a senha.
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
+                name="email"
                 variant="outlined"
                 required
                 fullWidth
-                name="email"
                 label="E-mail"
-                type="email"
-                id="email"
-                autoComplete="current-email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Senha"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -102,18 +79,18 @@ const ResetPassword = ({ history, match }) => {
             color="primary"
             className={classes.submit}
           >
-            Redefinir senha
+            Enviar e-mail
           </Button>
         </form>
       </div>
-      <Box mt={5}>
+      <Box mt={8}>
         <Copyright />
       </Box>
     </Container>
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;
 
 const useStyles = makeStyles(theme => ({
   "@global": {

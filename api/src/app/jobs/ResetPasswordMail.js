@@ -1,26 +1,31 @@
-const Mail = require('../services/Mail')
+const Mail = require("../services/Mail");
 
 class ResetPasswordMail {
-  get key () {
-    return 'ResetPasswordMail'
+  get key() {
+    return "ResetPasswordMail";
   }
 
-  async handle (job, done) {
-    const { user, token } = job.data
+  async handle(req, res, done) {
+    const { name, email, passwordResetToken } = req.data.user;
 
-    await Mail.sendMail({
-      from: '"netMap" , <netmap@ifsp.edu.br>',
-      to: user.email,
-      subject: 'Solicitação de Recuperação de senha netMap',
-      template: 'resetPasswordMail',
-      context: { user, token }
-    }, (err, info) => {
-      if (err)
-        return send.status(401).json({ message: 'Cannot send forgot password email.' })
-    })
+    await Mail.sendMail(
+      {
+        from: '"netMap" , <netmap@ifsp.edu.br>',
+        to: email,
+        subject: "Solicitação de recuperação de senha do netMap.",
+        template: "resetPasswordMail",
+        context: {
+          name: name,
+          token: passwordResetToken
+        }
+      },
+      err => {
+        if (err) console.log(err);
+      }
+    );
 
-    return done()
+    return done();
   }
 }
 
-module.exports = new ResetPasswordMail()
+module.exports = new ResetPasswordMail();
