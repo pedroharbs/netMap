@@ -6,7 +6,9 @@ import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 import ForgotPassword from "../pages/password/ForgotPassword";
 import ResetPassword from "../pages/password/ResetPassword";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
+import Profile from "../pages/profile/Profile";
+// import Campi from "../pages/campi/Campi";
 
 export default function Routes() {
   return (
@@ -16,6 +18,7 @@ export default function Routes() {
       <Route path="/lostPassword" exact component={ForgotPassword} />
       <Route path="/resetPassword/:token" exact component={ResetPassword} />
       <PrivateRoute path="/dashboard" exact component={Dashboard} />
+      <PrivateRoute path="/profile" exact component={Profile} />
     </BrowserRouter>
   );
 }
