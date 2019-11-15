@@ -11,10 +11,8 @@ import {
 import { toast } from "react-toastify";
 
 import Logo from "../../assets/logo.png";
-import Api from "../../services/Api";
+import api from "../../services/api";
 import Copyright from "../../components/Copyright";
-
-import cookies from "../../utils/cookies";
 
 const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -22,19 +20,20 @@ const ForgotPassword = ({ history }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    Api.get("isFirstAcess").then(response => {
+    api.get("isFirstAcess").then(response => {
       if (response.data.isFirstAcess) history.push("/firstAccess");
     });
 
-    if (cookies.get("authCookie")) history.push("/dashboard");
+    if (localStorage.getItem("authToken")) history.push("/dashboard");
   }, [history]);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    Api.post("/forgotPassword", {
-      email
-    })
+    api
+      .post("/forgotPassword", {
+        email
+      })
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
       })

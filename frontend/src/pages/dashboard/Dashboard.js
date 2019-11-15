@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-
+import { Switch, Route, Link } from "react-router-dom";
 import {
   AppBar,
   Drawer,
@@ -24,15 +24,18 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { toast } from "react-toastify";
 
 import menuListItems from "./menuListItems";
-import cookies from "../../utils/cookies";
+
+import Profile from "../profile/Profile";
+import Campuses from "../campuses/Campuses";
 
 const drawerWidth = 260;
 
 const Dashboard = props => {
-  const { history } = props;
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
+  const [title, setTitle] = useState("Painel administrativo");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -40,13 +43,26 @@ const Dashboard = props => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    switch (props.history.location.pathname) {
+      case `${props.match.url}/profile`:
+        setTitle("Seu perfil");
+        break;
+      case `${props.match.url}/campuses`:
+        setTitle("Gestão de Campi");
+        break;
+      default:
+        setTitle("Painel administrativo");
+    }
+  }, [props.history.location.pathname]);
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const logout = () => {
     try {
-      cookies.remove("authCookie");
-      history.push("/");
+      localStorage.removeItem("authToken");
       toast.success("Você saiu do sistema.");
+      props.history.push("/");
     } catch {
       toast.error("Problema ao sair do sistema.");
     }
@@ -78,11 +94,13 @@ const Dashboard = props => {
             noWrap
             className={classes.title}
           >
-            {props.title ? props.title : "Painel administrativo"}
+            {title}
           </Typography>
-          <IconButton onClick={() => history.push("/profile")} color="inherit">
-            <AccountBoxIcon />
-          </IconButton>
+          <Link to={`${props.match.url}/profile`}>
+            <IconButton color="inherit">
+              <AccountBoxIcon />
+            </IconButton>
+          </Link>
           <IconButton onClick={logout} color="inherit">
             <ExitToAppIcon />
           </IconButton>
@@ -107,7 +125,13 @@ const Dashboard = props => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {props.children ? props.children : ""}
+            <Switch>
+              <Route path={`${props.match.path}/profile`} component={Profile} />
+              <Route
+                path={`${props.match.path}/campuses`}
+                component={Campuses}
+              />
+            </Switch>
           </Grid>
         </Container>
       </main>

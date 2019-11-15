@@ -1,18 +1,14 @@
-import cookies from "./cookies";
-import Api from "../services/Api";
+import api from "../services/api";
 
 export default function authenticated() {
-  const token = cookies.get("authCookie");
-
-  if (token) {
-    return Api.get("/authenticated", {
-      headers: { authorization: "Bearer " + token }
-    })
+  if (localStorage.getItem("authToken")) {
+    return api
+      .get("/authenticated")
       .then(() => {
         return true;
       })
       .catch(err => {
-        console.log(err);
+        localStorage.removeItem("authToken");
         return false;
       });
   }

@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import Copyright from "../../components/Copyright";
 
 import Logo from "../../assets/logo.png";
-import Api from "../../services/Api";
+import api from "../../services/api";
 
 const Register = ({ history }) => {
   const [name, setName] = useState("");
@@ -25,7 +25,7 @@ const Register = ({ history }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    Api.get("isFirstAcess").then(response => {
+    api.get("isFirstAcess").then(response => {
       if (!response.data.isFirstAcess) history.push("/");
     });
   }, [history]);
@@ -33,7 +33,7 @@ const Register = ({ history }) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    Api.post("/firstAcess", {
+    api.post("/firstAcess", {
       name,
       recordId,
       level: "Administrador",

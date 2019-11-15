@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -9,9 +9,7 @@ import {
 
 import { toast } from "react-toastify";
 
-import Dashboard from "../dashboard/Dashboard";
-
-import Api from "../../services/Api";
+import api from "../../services/api";
 
 const Profile = ({ history }) => {
   const [name, setName] = useState("");
@@ -19,12 +17,28 @@ const Profile = ({ history }) => {
   const [password, setPassword] = useState("");
   const [recordId, setRecord] = useState("");
 
+  useEffect(() => {
+    api.get("/listUsers")
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        if (error.response) {
+          toast.error(error.response.data.messageUi_PtBr);
+        } else if (error.request) {
+          toast.error("O servidor não está respondendo.");
+        } else {
+          toast.error(error.message);
+        }
+      });
+  }, []);
+
   const classes = useStyles();
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    Api.post("/firstAcess", {
+    api.post("/firstAcess", {
       name,
       recordId,
       level: "Administrador",
@@ -47,67 +61,65 @@ const Profile = ({ history }) => {
   }
 
   return (
-    <Dashboard title="Perfil">
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-            <TextField
-              name="name"
-              variant="outlined"
-              required
-              fullWidth
-              label="Nome"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              autoFocus
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="email"
-              variant="outlined"
-              required
-              fullWidth
-              label="E-mail"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="recordId"
-              variant="outlined"
-              required
-              fullWidth
-              label="Prontuário"
-              value={recordId}
-              onChange={e => setRecord(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="password"
-              variant="outlined"
-              required
-              fullWidth
-              label="Senha"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-          </Grid>
+    <form className={classes.form} onSubmit={handleSubmit}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+          <TextField
+            name="name"
+            variant="outlined"
+            required
+            fullWidth
+            label="Nome"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            autoFocus
+          />
         </Grid>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-        >
-          Atualizar perfil
-        </Button>
-      </form>
-    </Dashboard>
+        <Grid item xs={12}>
+          <TextField
+            name="email"
+            variant="outlined"
+            required
+            fullWidth
+            label="E-mail"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="recordId"
+            variant="outlined"
+            required
+            fullWidth
+            label="Prontuário"
+            value={recordId}
+            onChange={e => setRecord(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="password"
+            variant="outlined"
+            required
+            fullWidth
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </Grid>
+      </Grid>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+        className={classes.submit}
+      >
+        Atualizar perfil
+      </Button>
+    </form>
   );
 };
 

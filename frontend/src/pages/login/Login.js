@@ -13,8 +13,7 @@ import { toast } from "react-toastify";
 
 import Copyright from "../../components/Copyright";
 import Logo from "../../assets/logo.png";
-import Api from "../../services/Api";
-import cookies from "../../utils/cookies";
+import api from "../../services/api";
 import authenticated from "../../utils/authenticated";
 
 const Login = ({ history }) => {
@@ -24,22 +23,24 @@ const Login = ({ history }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    Api.get("isFirstAcess").then(response => {
+    api.get("isFirstAcess").then(response => {
       if (response.data.isFirstAcess) history.push("/firstAccess");
     });
 
     if (authenticated()) history.push("/dashboard");
   }, [history]);
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
-    Api.post("/createSession", {
-      recordId,
-      password
-    })
-      .then(async response => {
-        await cookies.set("authCookie", response.data.token, { path: "/" }); //Add httpOnly option.
+    api
+      .post("/createSession", {
+        recordId,
+        password
+      })
+      .then(response => {
+        localStorage.setItem("authToken", response.data.token);
+
         toast.success(response.data.messageUi_PtBr);
         history.push("/dashboard");
       })

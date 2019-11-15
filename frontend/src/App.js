@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 toast.configure();
 
-function App() {
+export default function App() {
   return (
     <>
       <CssBaseline />
@@ -14,5 +14,3 @@ function App() {
     </>
   );
 }
-
-export default App;

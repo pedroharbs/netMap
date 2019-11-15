@@ -18,7 +18,7 @@ const menuListItems = (
       </ListItem>
     </Link>
 
-    <Link to="/campi">
+    <Link to="/dashboard/campuses">
       <ListItem button>
         <ListItemIcon>
           <BusinessIcon />
@@ -27,7 +27,7 @@ const menuListItems = (
       </ListItem>
     </Link>
 
-    <Link to="/users">
+    <Link to="/dashboard/users">
       <ListItem button>
         <ListItemIcon>
           <SupervisorAccountIcon />
