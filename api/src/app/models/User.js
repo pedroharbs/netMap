@@ -30,7 +30,7 @@ const JoiUserSchema = Joi.object().keys({
 
 const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema));
 
-UserSchema.pre("save", async function(req, res, next) {
+UserSchema.pre("save", async function(req, res) {
   this.password = await bcrypt.hash(this.password, 8);
 });
 

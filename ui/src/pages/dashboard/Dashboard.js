@@ -60,7 +60,7 @@ const Dashboard = props => {
 
   const logout = () => {
     try {
-      localStorage.removeItem("authToken");
+      localStorage.clear();
       toast.success("Você saiu do sistema.");
       props.history.push("/");
     } catch {

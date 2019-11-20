@@ -15,8 +15,16 @@ class UserController {
     return res.json(users);
   }
 
+  async getByRecordId(req, res) {
+    const user = await User.findOne({
+      recordId: req.query.recordId || req.body.session.recordId
+    });
+
+    return res.json(user);
+  }
+
   async store(req, res) {
-    if (req.body.level == "Administrador") {
+    if (req.body.isFirstAcess || req.body.session.level == "Administrador") {
       if (await User.findOne(req.body)) {
         return res.status(403).json({
           message: "User already exists.",
@@ -27,7 +35,7 @@ class UserController {
       const user = new User({
         name: req.body.name,
         recordId: req.body.recordId,
-        level: req.body.level,
+        level: req.body.isFirstAcess ? "Administrador" : req.body.level,
         email: req.body.email,
         password: req.body.password
       });
@@ -53,25 +61,24 @@ class UserController {
     }
   }
 
-  async update(req, res) {
-    if (req.userLevel == "Administrador") {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
-      });
+  async updateByRecordId(req, res) {
+    if (req.body.password === "") delete req.body.password;
+    const user = await User.findOneAndUpdate(
+      { recordId: req.body.recordId },
+      req.body,
+      { new: true }
+    );
 
-      return res.status(200).json({
-        message: "User updated succesfully."
-      });
-    }
-
-    return res.status(401).json({
-      message: "Permission denied."
+    return res.status(200).json({
+      message: "User updated succesfully.",
+      message: "Usuário atualizado com sucesso.",
+      recordId: user.recordId
     });
   }
 
   async destroy(req, res) {
-    if (req.userLevel == "Administrador") {
-      await User.findByIdAndDelete(req.params.id);
+    if (req.body.session.level == "Administrador") {
+      await User.findByIdAndDelete(req.query.id);
 
       return res.status(200).json({
         message: "User deleted succesfully."

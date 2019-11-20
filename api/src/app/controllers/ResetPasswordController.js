@@ -15,7 +15,7 @@ class ResetPasswordController {
 
     joiSchema.validate(
       {
-        email: req.body.email
+        email: req.query.email
       },
       err => {
         if (err) {
@@ -25,7 +25,7 @@ class ResetPasswordController {
           });
         }
 
-        User.findOne({ email: req.body.email }).then(async user => {
+        User.findOne({ email: req.query.email }).then(async user => {
           if (!user) {
             return res.status(500).json({
               message: "User not exists.",
@@ -71,9 +71,9 @@ class ResetPasswordController {
 
     joiSchema.validate(
       {
-        email: req.body.email,
-        password: req.body.password,
-        token: req.body.token
+        email: req.query.email,
+        password: req.query.password,
+        token: req.query.token
       },
       err => {
         if (err) {
@@ -83,7 +83,7 @@ class ResetPasswordController {
           });
         }
 
-        User.findOne({ email: req.body.email }).then(async user => {
+        User.findOne({ email: req.query.email }).then(async user => {
           if (!user) {
             return res.status(500).json({
               message: "User not exists.",
@@ -91,7 +91,7 @@ class ResetPasswordController {
             });
           }
 
-          if (user.passwordResetToken !== req.body.token) {
+          if (user.passwordResetToken !== req.query.token) {
             return res.status(500).json({
               message: "Token invalid.",
               messageUi_PtBr:
@@ -109,7 +109,7 @@ class ResetPasswordController {
             });
           }
 
-          user.password = req.body.password;
+          user.password = req.query.password;
           user.passwordResetToken = undefined;
           user.passwordResetExpires = undefined;
 

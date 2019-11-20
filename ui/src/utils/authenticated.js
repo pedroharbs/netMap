@@ -8,7 +8,7 @@ export default function authenticated() {
         return true;
       })
       .catch(err => {
-        localStorage.removeItem("authToken");
+        localStorage.clear();
         return false;
       });
   }

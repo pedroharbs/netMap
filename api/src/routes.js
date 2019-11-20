@@ -22,7 +22,7 @@ const ResetPasswordController = require("./app/controllers/ResetPasswordControll
  * User Routes
  */
 
-routes.post("/firstAcess", FirstAcess, Auth, UserController.store);
+routes.post("/firstAcess", FirstAcess, UserController.store);
 routes.get("/isFirstAcess", isFirstAcess);
 routes.get("/authenticated", Auth, isAuth);
 routes.post("/createSession", SessionController.store);
@@ -31,9 +31,10 @@ routes.post("/resetPassword", ResetPasswordController.update);
 
 routes.use(Auth);
 
-routes.put("/updateUser/:id", UserController.update);
 routes.post("/createUser", UserController.store);
 routes.get("/listUsers", UserController.index);
-routes.delete("/deleteUser/:id", UserController.destroy);
+routes.get("/getUser", UserController.getByRecordId);
+routes.put("/updateUser", UserController.updateByRecordId);
+routes.delete("/deleteUser", UserController.destroy);
 
 module.exports = routes;

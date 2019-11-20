@@ -4,6 +4,9 @@ import {
   TextField,
   Grid,
   Typography,
+  FormGroup,
+  FormControlLabel,
+  Switch,
   makeStyles
 } from "@material-ui/core";
 
@@ -15,12 +18,16 @@ const Profile = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [recordId, setRecord] = useState("");
+  const [recordId, setRecordId] = useState("");
+  const [updatePassword, setUpdatePassword] = useState(false);
 
   useEffect(() => {
-    api.get("/listUsers")
+    api
+      .get("/getUser")
       .then(response => {
-        console.log(response);
+        setName(response.data.name);
+        setEmail(response.data.email);
+        setRecordId(response.data.recordId);
       })
       .catch(error => {
         if (error.response) {
@@ -38,14 +45,15 @@ const Profile = ({ history }) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    api.post("/firstAcess", {
-      name,
-      recordId,
-      level: "Administrador",
-      email,
-      password
-    })
+    api
+      .put("/updateUser", {
+        name,
+        recordId,
+        email,
+        password
+      })
       .then(response => {
+        localStorage.setItem("recordId", response.data.recordId);
         toast.success(response.data.messageUi_PtBr);
         history.push("/dashboard");
       })
@@ -94,21 +102,32 @@ const Profile = ({ history }) => {
             fullWidth
             label="Prontuário"
             value={recordId}
-            onChange={e => setRecord(e.target.value)}
+            onChange={e => setRecordId(e.target.value)}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="password"
-            variant="outlined"
-            required
-            fullWidth
-            label="Senha"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </Grid>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={updatePassword}
+              onChange={() => setUpdatePassword(!updatePassword)}
+              color="primary"
+            />
+          }
+          label="Alterar senha"
+        />
+        {updatePassword && (
+          <Grid item xs={12}>
+            <TextField
+              name="password"
+              variant="outlined"
+              required={updatePassword}
+              fullWidth
+              label="Senha"
+              type="password"
+              onChange={e => setPassword(e.target.value)}
+            />
+          </Grid>
+        )}
       </Grid>
       <Button
         type="submit"
