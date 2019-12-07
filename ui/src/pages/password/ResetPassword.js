@@ -9,10 +9,10 @@ import {
   Container
 } from "@material-ui/core";
 import { toast } from "react-toastify";
-
-import Logo from "../../assets/logo.png";
 import api from "../../services/api";
-import Copyright from "../../components/Copyright";
+import handleReqError from "../../utils/handleReqError";
+import Logo from "../../assets/logo.png";
+import Copyright from "../../components/copyright/Copyright";
 
 const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState("");
@@ -30,27 +30,19 @@ const ResetPassword = ({ history, match }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
+    const token = match.params.token;
 
-    const token = match.query.token;
-
-    api.post("/resetPassword", {
-      email,
-      password,
-      token
-    })
+    api
+      .post("/resetPassword", {
+        email,
+        password,
+        token
+      })
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
         history.push("/");
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }
 
   return (

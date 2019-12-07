@@ -15,8 +15,10 @@ const isFirstAcess = require("./app/middlewares/isFirstAcess");
  */
 
 const SessionController = require("./app/controllers/SessionController");
-const UserController = require("./app/controllers/UserController");
 const ResetPasswordController = require("./app/controllers/ResetPasswordController");
+const UserController = require("./app/controllers/UserController");
+const CampusController = require("./app/controllers/CampusController");
+const ProviderController = require("./app/controllers/ProviderController");
 
 /**
  * User Routes
@@ -33,8 +35,21 @@ routes.use(Auth);
 
 routes.post("/createUser", UserController.store);
 routes.get("/listUsers", UserController.index);
-routes.get("/getUser", UserController.getByRecordId);
-routes.put("/updateUser", UserController.updateByRecordId);
-routes.delete("/deleteUser", UserController.destroy);
+routes.get("/getUser/:recordId*?", UserController.getByRecordId);
+routes.put("/updateUser/:oldRecordId", UserController.updateByRecordId);
+routes.delete("/deleteUser/:recordId", UserController.destroyByRecordId);
+
+routes.post("/createCampus", CampusController.store);
+routes.get("/listCampuses", CampusController.index);
+routes.get("/getCampus/:id", CampusController.getById);
+routes.put("/updateCampus/:id", CampusController.updateById);
+routes.delete("/deleteCampus/:id", CampusController.destroyById);
+
+routes.post("/createProvider", ProviderController.store);
+routes.get("/listProviders", ProviderController.index);
+routes.get("/getProvider/:id", ProviderController.getById);
+routes.put("/updateProvider/:id", ProviderController.updateById);
+routes.delete("/deleteProvider/:id", ProviderController.destroyById);
+
 
 module.exports = routes;

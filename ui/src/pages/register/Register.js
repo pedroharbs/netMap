@@ -8,13 +8,11 @@ import {
   makeStyles,
   Container
 } from "@material-ui/core";
-
 import { toast } from "react-toastify";
-
-import Copyright from "../../components/Copyright";
-
-import Logo from "../../assets/logo.png";
 import api from "../../services/api";
+import handleReqError from "../../utils/handleReqError";
+import Copyright from "../../components/copyright/Copyright";
+import Logo from "../../assets/logo.png";
 
 const Register = ({ history }) => {
   const [name, setName] = useState("");
@@ -44,15 +42,7 @@ const Register = ({ history }) => {
         toast.success(response.data.messageUi_PtBr);
         history.push("/");
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }
 
   return (

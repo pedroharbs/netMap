@@ -8,13 +8,12 @@ import {
   makeStyles,
   Container
 } from "@material-ui/core";
-
 import { toast } from "react-toastify";
-
-import Copyright from "../../components/Copyright";
-import Logo from "../../assets/logo.png";
 import api from "../../services/api";
+import handleReqError from "../../utils/handleReqError";
 import authenticated from "../../utils/authenticated";
+import Copyright from "../../components/copyright/Copyright";
+import Logo from "../../assets/logo.png";
 
 const Login = ({ history }) => {
   const [recordId, setRecordId] = useState("");
@@ -44,15 +43,7 @@ const Login = ({ history }) => {
         toast.success(response.data.messageUi_PtBr);
         history.push("/dashboard");
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }
 
   return (

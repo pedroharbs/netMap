@@ -3,22 +3,21 @@ import {
   Button,
   TextField,
   Grid,
-  Typography,
-  FormGroup,
   FormControlLabel,
   Switch,
   makeStyles
 } from "@material-ui/core";
-
 import { toast } from "react-toastify";
-
 import api from "../../services/api";
+import handleReqError from "../../utils/handleReqError";
+import logout from "../../utils/logout";
 
 const Profile = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [recordId, setRecordId] = useState("");
+  const [oldRecordId, setOldRecordId] = useState("");
   const [updatePassword, setUpdatePassword] = useState(false);
 
   useEffect(() => {
@@ -28,16 +27,9 @@ const Profile = ({ history }) => {
         setName(response.data.name);
         setEmail(response.data.email);
         setRecordId(response.data.recordId);
+        setOldRecordId(response.data.recordId);
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }, []);
 
   const classes = useStyles();
@@ -46,26 +38,21 @@ const Profile = ({ history }) => {
     e.preventDefault();
 
     api
-      .put("/updateUser", {
+      .put(`/updateUser/${oldRecordId}`, {
         name,
         recordId,
         email,
         password
       })
       .then(response => {
-        localStorage.setItem("recordId", response.data.recordId);
         toast.success(response.data.messageUi_PtBr);
-        history.push("/dashboard");
-      })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
+        if (recordId === oldRecordId) {
+          history.push("/dashboard");
         } else {
-          toast.error(error.message);
+          logout();
         }
-      });
+      })
+      .catch(error => handleReqError(error));
   }
 
   return (

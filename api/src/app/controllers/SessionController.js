@@ -2,7 +2,6 @@ const User = require("../models/User");
 
 class SessionController {
   store(req, res) {
-    console.log(req.session);
     User.findOne({ recordId: req.body.recordId }).then(async user => {
       if (user === null) {
         return res.status(500).json({

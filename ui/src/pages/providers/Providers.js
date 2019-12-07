@@ -4,35 +4,48 @@ import api from "../../services/api";
 import handleReqError from "../../utils/handleReqError";
 import CustomMaterialTable from "../../components/CustomMaterialTable";
 import InputMask from "react-input-mask";
-import cities from "./cities";
 
-const Campuses = () => {
-  const [campuses, setCampuses] = useState([]);
+const Providers = () => {
+  const [providers, setProviders] = useState([]);
   const columns = [
     { title: "Nome", field: "name" },
-    { title: "Cidade - Sigla", field: "city", lookup: cities },
     {
       title: "Endereço IP",
       field: "ip",
       editComponent: props => (
         <InputMask
-          mask="999.999"
+          mask="999.999.999.999"
           value={props.value}
           onChange={e => props.onChange(e.target.value)}
         />
       )
-    }
+    },
+    {
+      title: "CIDR",
+      field: "cidr",
+      editComponent: props => (
+        <InputMask
+          mask="/99"
+          value={props.value}
+          onChange={e => props.onChange(e.target.value)}
+        />
+      )
+    },
+    { title: "Máscara de sub-rede", field: "mask", readonly: true }
   ];
 
   useEffect(() => {
-    getAllCampuses();
+    const getData = async () => {
+      await getAllProviders();
+    };
+    getData();
   }, []);
 
-  const getAllCampuses = () => {
+  const getAllProviders = () => {
     api
-      .get("/listCampuses")
-      .then(async response => {
-        setCampuses(response.data);
+      .get("/listProviders")
+      .then(response => {
+        setProviders(response.data);
       })
       .catch(error => {
         handleReqError(error);
@@ -40,12 +53,12 @@ const Campuses = () => {
       });
   };
 
-  const createCampus = data => {
+  const createProvider = data => {
     api
-      .post("/createCampus", data)
+      .post("/createProvider", data)
       .then(async response => {
         toast.success(response.data.messageUi_PtBr);
-        await getAllCampuses();
+        await getAllProviders();
       })
       .catch(error => {
         handleReqError(error);
@@ -53,12 +66,12 @@ const Campuses = () => {
       });
   };
 
-  const updateCampus = (newData, oldData) => {
+  const updateProvider = (newData, oldData) => {
     api
-      .put(`/updateCampus/${oldData._id}`, newData)
+      .put(`/updateProvider/${oldData.recordId}`, newData)
       .then(async response => {
         toast.success(response.data.messageUi_PtBr);
-        await getAllCampuses();
+        await getAllProviders();
       })
       .catch(error => {
         handleReqError(error);
@@ -66,12 +79,12 @@ const Campuses = () => {
       });
   };
 
-  const destroyCampus = ({ _id }) => {
+  const destroyProvider = ({ recordId }) => {
     api
-      .delete(`/deleteCampus/${_id}`)
+      .delete(`/deleteProvider/${recordId}`)
       .then(async response => {
         toast.success(response.data.messageUi_PtBr);
-        await getAllCampuses();
+        await getAllProviders();
       })
       .catch(error => {
         handleReqError(error);
@@ -83,14 +96,14 @@ const Campuses = () => {
     <div style={{ maxWidth: "100%", minWidth: "100%" }}>
       <CustomMaterialTable
         columns={columns}
-        data={campuses}
-        title="Campi"
-        insert={createCampus}
-        update={updateCampus}
-        destroy={destroyCampus}
+        data={providers}
+        title="Provedores de internet"
+        insert={createProvider}
+        update={updateProvider}
+        destroy={destroyProvider}
       />
     </div>
   );
 };
 
-export default Campuses;
+export default Providers;

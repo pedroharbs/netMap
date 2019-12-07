@@ -9,10 +9,10 @@ import {
   Container
 } from "@material-ui/core";
 import { toast } from "react-toastify";
-
-import Logo from "../../assets/logo.png";
 import api from "../../services/api";
-import Copyright from "../../components/Copyright";
+import handleReqError from "../../utils/handleReqError";
+import Logo from "../../assets/logo.png";
+import Copyright from "../../components/copyright/Copyright";
 
 const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -37,15 +37,7 @@ const ForgotPassword = ({ history }) => {
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }
 
   return (

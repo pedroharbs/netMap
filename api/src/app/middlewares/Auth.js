@@ -41,10 +41,7 @@ module.exports = (req, res, next) => {
       });
     }
 
-    req.body = {
-      ...req.body,
-      session: { recordId: decoded.recordId, level: decoded.level }
-    };
+    req.body.session = { recordId: decoded.recordId, level: decoded.level };
 
     next();
   });

@@ -10,10 +10,9 @@ import {
   Typography,
   Divider,
   IconButton,
-  Badge,
   Container,
   Grid,
-  Paper
+  Tooltip
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
@@ -22,11 +21,12 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 import { toast } from "react-toastify";
-
 import menuListItems from "./menuListItems";
-
 import Profile from "../profile/Profile";
+import Users from "../users/Users";
 import Campuses from "../campuses/Campuses";
+import Providers from "../providers/Providers";
+import logout from "../../utils/logout";
 
 const drawerWidth = 260;
 
@@ -36,11 +36,8 @@ const Dashboard = props => {
   const [open, setOpen] = useState(true);
   const [title, setTitle] = useState("Painel administrativo");
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawer = () => {
+    setOpen(!open);
   };
 
   useEffect(() => {
@@ -49,24 +46,18 @@ const Dashboard = props => {
         setTitle("Seu perfil");
         break;
       case `${props.match.url}/campuses`:
-        setTitle("Gestão de Campi");
+        setTitle("Gestão de campi");
+        break;
+      case `${props.match.url}/users`:
+        setTitle("Gestão de usuários");
+        break;
+      case `${props.match.url}/providers`:
+        setTitle("Gestão de provedores de internet");
         break;
       default:
         setTitle("Painel administrativo");
     }
-  }, [props.history.location.pathname]);
-
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const logout = () => {
-    try {
-      localStorage.clear();
-      toast.success("Você saiu do sistema.");
-      props.history.push("/");
-    } catch {
-      toast.error("Problema ao sair do sistema.");
-    }
-  };
+  }, [props.history.location.pathname, props.match.url]);
 
   return (
     <div className={classes.root}>
@@ -79,7 +70,7 @@ const Dashboard = props => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             className={clsx(
               classes.menuButton,
               open && classes.menuButtonHidden
@@ -97,13 +88,17 @@ const Dashboard = props => {
             {title}
           </Typography>
           <Link to={`${props.match.url}/profile`}>
-            <IconButton color="inherit">
-              <AccountBoxIcon />
-            </IconButton>
+            <Tooltip title="Meu perfil">
+              <IconButton color="inherit">
+                <AccountBoxIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
-          <IconButton onClick={logout} color="inherit">
-            <ExitToAppIcon />
-          </IconButton>
+          <Tooltip title="Sair">
+            <IconButton onClick={logout} color="inherit">
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -114,7 +109,7 @@ const Dashboard = props => {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -127,9 +122,14 @@ const Dashboard = props => {
           <Grid container spacing={3}>
             <Switch>
               <Route path={`${props.match.path}/profile`} component={Profile} />
+              <Route path={`${props.match.path}/users`} component={Users} />
               <Route
                 path={`${props.match.path}/campuses`}
                 component={Campuses}
+              />
+              <Route
+                path={`${props.match.path}/providers`}
+                component={Providers}
               />
             </Switch>
           </Grid>
@@ -204,6 +204,7 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto"
   },
   container: {
+    width: "100%",
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4)
   },
