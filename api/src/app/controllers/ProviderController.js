@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-class UserController {
+class ProviderController {
   async index(req, res) {
     const users = await User.find({}, "recordId name email level")
       .nor({
@@ -12,7 +12,7 @@ class UserController {
     return res.json(users);
   }
 
-  async getByRecordId(req, res) {
+  async getById(req, res) {
     const user = await User.findOne({
       recordId: req.params.recordId || req.body.session.recordId
     });
@@ -72,7 +72,7 @@ class UserController {
     }
   }
 
-  async updateByRecordId(req, res) {
+  async updateById(req, res) {
     if (
       req.body.session.recordId === req.params.oldRecordId ||
       req.body.session.level == "Administrador"
@@ -128,7 +128,7 @@ class UserController {
     }
   }
 
-  async destroyByRecordId(req, res) {
+  async destroyById(req, res) {
     if (req.body.session.level == "Administrador") {
       try {
         await User.deleteOne({ recordId: req.params.recordId });
@@ -154,4 +154,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController();
+module.exports = new ProviderController();

@@ -3,14 +3,14 @@ require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const Youch = require("youch");
 const validate = require("express-validation");
 const databaseConfig = require("./config/database");
 
 class App {
   constructor() {
-    this.express = express();
-    this.isDev = process.env.NODE_ENV === "production";
+    this.app = express();
 
     this.database();
     this.middlewares();
@@ -20,22 +20,24 @@ class App {
 
   database() {
     mongoose.connect(databaseConfig.uri, {
-      useCreateIndex: true,
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
   }
 
   middlewares() {
-    this.express.use(express.json());
-    this.express.use(cors());
+    this.app.use(express.json());
+    this.app.use(cors());
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(bodyParser.json());
   }
 
   routes() {
-    this.express.use(require("./routes"));
+    this.app.use(require("./routes"));
   }
 
   exception() {
-    // this.express.use(async (err, req, res, next) => {
+    // this.app.use(async (err, req, res, next) => {
     //   if (err instanceof validate.ValidationError) {
     //     return res.status(err.status).json(err)
     //   }
@@ -50,4 +52,4 @@ class App {
   }
 }
 
-module.exports = new App().express;
+module.exports = new App().app;

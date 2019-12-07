@@ -8,51 +8,41 @@ import {
   makeStyles,
   Container
 } from "@material-ui/core";
-
 import { toast } from "react-toastify";
-
-import Copyright from "../../components/Copyright";
-
+import api from "../../services/api";
+import handleReqError from "../../utils/handleReqError";
 import Logo from "../../assets/logo.png";
-import Api from "../../services/Api";
+import Copyright from "../../components/copyright/Copyright";
 
-const Register = ({ history }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState("");
-  const [recordId, setRecord] = useState("");
+  const [email, setEmail] = useState("");
 
   const classes = useStyles();
 
   useEffect(() => {
-    Api.get("isFirstAcess").then(response => {
-      if (!response.data.isFirstAcess) history.push("/");
+    api.get("isFirstAcess").then(response => {
+      if (response.data.isFirstAcess) history.push("/firstAccess");
     });
+
+    if (localStorage.getItem("authToken")) history.push("/dashboard");
   }, [history]);
 
   function handleSubmit(e) {
     e.preventDefault();
+    const token = match.params.token;
 
-    Api.post("/firstAcess", {
-      name,
-      recordId,
-      level: "Administrador",
-      email,
-      password
-    })
+    api
+      .post("/resetPassword", {
+        email,
+        password,
+        token
+      })
       .then(response => {
         toast.success(response.data.messageUi_PtBr);
         history.push("/");
       })
-      .catch(error => {
-        if (error.response) {
-          toast.error(error.response.data.messageUi_PtBr);
-        } else if (error.request) {
-          toast.error("O servidor não está respondendo.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      .catch(error => handleReqError(error));
   }
 
   return (
@@ -62,52 +52,34 @@ const Register = ({ history }) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography component="p" align="center">
-                Crie sua credencial para o primeiro acesso ao sistema.
+              <Typography variant="p" component="p" align="center">
+                Digite sua nova senha!
               </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                label="Nome"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                autoFocus
-              />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="email"
                 variant="outlined"
                 required
                 fullWidth
+                name="email"
                 label="E-mail"
+                type="email"
+                id="email"
+                autoComplete="current-email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="recordId"
                 variant="outlined"
                 required
                 fullWidth
-                label="Prontuário"
-                value={recordId}
-                onChange={e => setRecord(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
                 name="password"
-                variant="outlined"
-                required
-                fullWidth
                 label="Senha"
                 type="password"
+                id="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
@@ -120,18 +92,18 @@ const Register = ({ history }) => {
             color="primary"
             className={classes.submit}
           >
-            Iniciar sistema
+            Redefinir senha
           </Button>
         </form>
       </div>
-      <Box mt={8}>
+      <Box mt={5}>
         <Copyright />
       </Box>
     </Container>
   );
 };
 
-export default Register;
+export default ResetPassword;
 
 const useStyles = makeStyles(theme => ({
   "@global": {

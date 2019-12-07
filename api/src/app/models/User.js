@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate");
 const Joi = require("joi");
 const joigoose = require("joigoose")("mongoose");
 const bcrypt = require("bcryptjs");
@@ -21,6 +20,7 @@ const JoiUserSchema = Joi.object().keys({
     .regex(
       /(?=.*[}{,.^?~=+\-_\/*\-+.%$&\@!()#|])(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/
     ),
+  campuses: Joi.array().items(Joi.string()),
   passwordResetToken: Joi.string(),
   passwordResetExpires: Joi.date(),
   createdAt: Joi.date()
@@ -29,10 +29,6 @@ const JoiUserSchema = Joi.object().keys({
 });
 
 const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema));
-
-UserSchema.pre("save", async function(req, res, next) {
-  this.password = await bcrypt.hash(this.password, 8);
-});
 
 UserSchema.methods = {
   compareHash(password) {
@@ -47,7 +43,5 @@ UserSchema.statics = {
     });
   }
 };
-
-UserSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("User", UserSchema);

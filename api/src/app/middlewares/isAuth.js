@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+module.exports = (req, res) => {
   return res.status(200).send({
     auth: true,
     message: "Authentication valid."

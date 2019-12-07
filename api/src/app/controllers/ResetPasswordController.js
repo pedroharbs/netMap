@@ -4,6 +4,7 @@ const Queue = require("../services/Queue");
 const Joi = require("joi");
 const crypto = require("crypto");
 const moment = require("moment");
+const bcrypt = require("bcryptjs");
 
 class ResetPasswordController {
   async store(req, res) {
@@ -109,15 +110,23 @@ class ResetPasswordController {
             });
           }
 
-          user.password = req.body.password;
+          user.password = await bcrypt.hash(req.body.password, 8);
           user.passwordResetToken = undefined;
           user.passwordResetExpires = undefined;
 
-          await user.save();
+          await user.save(err => {
+            if (err) {
+              return res.status(400).json({
+                message: "Invalid inputs.",
+                messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
+                error: err
+              });
+            }
 
-          return res.status(201).json({
-            message: "Password redefined success.",
-            messageUi_PtBr: "Senha redefinida com sucesso!"
+            return res.status(201).json({
+              message: "Password redefined success.",
+              messageUi_PtBr: "Senha redefinida com sucesso!"
+            });
           });
         });
       }
