@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const joigoose = require("joigoose")("mongoose");
-const Netmask = require("netmask").Netmask;
 
 const JoiProviderSchema = Joi.object().keys({
   name: Joi.string().required(),

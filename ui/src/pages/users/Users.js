@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import api from "../../services/api";
 import handleReqError from "../../utils/handleReqError";
 import CustomMaterialTable from "../../components/CustomMaterialTable";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
@@ -127,6 +127,7 @@ const Users = () => {
           } else {
             user.campuses = campusesName[index];
           }
+          return null;
         });
 
         setUsers(response.data);
