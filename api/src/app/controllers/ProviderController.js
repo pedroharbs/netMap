@@ -1,5 +1,4 @@
 const Provider = require("../models/Provider");
-const bcrypt = require("bcryptjs");
 const Netmask = require("netmask").Netmask;
 
 class ProviderController {
