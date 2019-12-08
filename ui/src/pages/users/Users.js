@@ -133,7 +133,7 @@ const Users = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -145,7 +145,7 @@ const Users = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -161,7 +161,7 @@ const Users = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -177,7 +177,7 @@ const Users = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -190,7 +190,7 @@ const Users = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 

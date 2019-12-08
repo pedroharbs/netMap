@@ -16,7 +16,6 @@ class UserController {
     const user = await User.findOne({
       recordId: req.params.recordId || req.body.session.recordId
     });
-
     user.password = undefined;
     return res.json(user);
   }
@@ -58,7 +57,6 @@ class UserController {
             error: err
           });
         }
-
         return res.status(201).json({
           message: "User created.",
           messageUi_PtBr: "Usuário criado com sucesso!"
@@ -97,8 +95,6 @@ class UserController {
           });
       }
 
-      console.log(req.body.campuses);
-
       user.recordId = req.body.recordId;
       user.name = req.body.name;
       user.email = req.body.email;
@@ -114,10 +110,9 @@ class UserController {
             error: err
           });
         }
-
         return res.status(200).json({
           message: "User updated succesfully.",
-          messageUi_PtBr: "Usuário atualizado com sucesso."
+          messageUi_PtBr: "Usuário atualizado com sucesso!"
         });
       });
     } else {
@@ -134,7 +129,7 @@ class UserController {
         await User.deleteOne({ recordId: req.params.recordId });
         return res.status(200).json({
           message: "User deleted succesfully.",
-          messageUi_PtBr: "Usuário excluído com sucesso."
+          messageUi_PtBr: "Usuário excluído com sucesso!"
         });
       } catch (err) {
         if (err) {
