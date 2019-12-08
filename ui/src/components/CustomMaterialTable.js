@@ -16,6 +16,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import ListIcon from "@material-ui/icons/List";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,7 +43,8 @@ const tableIcons = {
 };
 
 const CustomMaterialTable = props => {
-  const { columns, data, title, insert, update, destroy } = props;
+  const { columns, data, title, insert, update, destroy, modal } = props;
+
   return (
     <MaterialTable
       icons={tableIcons}
@@ -50,10 +52,23 @@ const CustomMaterialTable = props => {
       data={data}
       title={title}
       editable={{
-        onRowAdd: async newData => await insert(newData),
-        onRowUpdate: async (newData, oldData) => await update(newData, oldData),
-        onRowDelete: async oldData => await destroy(oldData)
+        onRowAdd: insert ? async newData => await insert(newData) : null,
+        onRowUpdate: update
+          ? async (newData, oldData) => await update(newData, oldData)
+          : null,
+        onRowDelete: destroy ? async oldData => await destroy(oldData) : null
       }}
+      actions={
+        modal
+          ? [
+              {
+                icon: ListIcon,
+                tooltip: "Listar IPs",
+                onClick: (event, rowData) => modal(rowData)
+              }
+            ]
+          : []
+      }
       localization={{
         header: { actions: "Ações" },
         body: {

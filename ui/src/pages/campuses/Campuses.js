@@ -12,8 +12,9 @@ const Campuses = () => {
     { title: "Nome", field: "name" },
     { title: "Cidade - Sigla", field: "city", lookup: cities },
     {
-      title: "Endereço IP",
+      title: "Endereço IP (Dois primeiros octetos)",
       field: "ip",
+      editable: "onAdd",
       editComponent: props => (
         <InputMask
           mask="999.999"
@@ -36,7 +37,7 @@ const Campuses = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -49,7 +50,7 @@ const Campuses = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -62,7 +63,7 @@ const Campuses = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 
@@ -75,7 +76,7 @@ const Campuses = () => {
       })
       .catch(error => {
         handleReqError(error);
-        throw error;
+        throw error.response;
       });
   };
 

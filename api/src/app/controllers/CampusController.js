@@ -15,6 +15,8 @@ class CampusController {
 
   async store(req, res) {
     if (req.body.session.level == "Administrador") {
+      if (req.body.ip) req.body.ip = req.body.ip.split("_").join("");
+
       const campus = new Campus({
         name: req.body.name,
         city: req.body.city,
@@ -49,7 +51,6 @@ class CampusController {
 
       campus.name = req.body.name;
       campus.city = req.body.city;
-      campus.ip = req.body.ip;
 
       await campus.save(err => {
         if (err) {
