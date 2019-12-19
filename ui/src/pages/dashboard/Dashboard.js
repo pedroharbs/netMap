@@ -27,6 +27,7 @@ import Users from "../users/Users";
 import Campuses from "../campuses/Campuses";
 import Providers from "../providers/Providers";
 import Vlans from "../vlans/Vlans";
+import Equipaments from "../equipaments/Equipaments";
 import logout from "../../utils/logout";
 
 const drawerWidth = 260;
@@ -57,6 +58,9 @@ const Dashboard = props => {
         break;
       case `${props.match.url}/vlans`:
         setTitle("Gestão de vlans");
+        break;
+      case `${props.match.url}/equipaments`:
+        setTitle("Gestão de equipametos");
         break;
       default:
         setTitle("Painel administrativo");
@@ -136,6 +140,10 @@ const Dashboard = props => {
                 component={Providers}
               />
               <Route path={`${props.match.path}/vlans`} component={Vlans} />
+              <Route
+                path={`${props.match.path}/equipaments`}
+                component={Equipaments}
+              />
             </Switch>
           </Grid>
         </Container>

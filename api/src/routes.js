@@ -20,6 +20,7 @@ const UserController = require("./app/controllers/UserController");
 const CampusController = require("./app/controllers/CampusController");
 const ProviderController = require("./app/controllers/ProviderController");
 const VlanController = require("./app/controllers/VlanController");
+const EquipamentController = require("./app/controllers/EquipamentController");
 
 /**
  * User Routes
@@ -57,5 +58,10 @@ routes.get("/listVlans", VlanController.index);
 routes.get("/getVlan/:id", VlanController.getById);
 routes.put("/updateVlan/:id", VlanController.updateById);
 routes.delete("/deleteVlan/:id", VlanController.destroyById);
+
+routes.post("/createEquipament", EquipamentController.store);
+routes.get("/listEquipaments", EquipamentController.index);
+routes.put("/updateEquipament/:id", EquipamentController.updateById);
+routes.delete("/deleteEquipament/:id", EquipamentController.destroyById);
 
 module.exports = routes;

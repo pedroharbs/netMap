@@ -8,6 +8,7 @@ import BusinessIcon from "@material-ui/icons/Business";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import WifiIcon from "@material-ui/icons/Wifi";
 import TrackChangesIcon from "@material-ui/icons/TrackChanges";
+import SettingsRemoteIcon from '@material-ui/icons/SettingsRemote';
 
 const menuListItems = (
   <div>
@@ -53,6 +54,15 @@ const menuListItems = (
           <TrackChangesIcon />
         </ListItemIcon>
         <ListItemText primary="Vlans" />
+      </ListItem>
+    </Link>
+
+    <Link to="/dashboard/equipaments">
+      <ListItem button>
+        <ListItemIcon>
+          <SettingsRemoteIcon />
+        </ListItemIcon>
+        <ListItemText primary="Equipamentos" />
       </ListItem>
     </Link>
   </div>

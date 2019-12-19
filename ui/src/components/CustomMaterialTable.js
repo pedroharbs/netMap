@@ -17,6 +17,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import ListIcon from "@material-ui/icons/List";
+import DnsIcon from "@material-ui/icons/Dns";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -43,7 +44,16 @@ const tableIcons = {
 };
 
 const CustomMaterialTable = props => {
-  const { columns, data, title, insert, update, destroy, modal } = props;
+  const {
+    columns,
+    data,
+    title,
+    insert,
+    update,
+    destroy,
+    modal,
+    portsDisposition
+  } = props;
 
   return (
     <MaterialTable
@@ -59,7 +69,7 @@ const CustomMaterialTable = props => {
         onRowDelete: destroy ? async oldData => await destroy(oldData) : null
       }}
       actions={
-        modal
+        (modal
           ? [
               {
                 icon: ListIcon,
@@ -67,7 +77,16 @@ const CustomMaterialTable = props => {
                 onClick: (event, rowData) => modal(rowData)
               }
             ]
-          : []
+          : [],
+        portsDisposition
+          ? [
+              {
+                icon: DnsIcon,
+                tooltip: "Disposição das portas",
+                onClick: (event, rowData) => portsDisposition(rowData)
+              }
+            ]
+          : [])
       }
       localization={{
         header: { actions: "Ações" },
