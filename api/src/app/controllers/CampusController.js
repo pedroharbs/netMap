@@ -27,8 +27,8 @@ class CampusController {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
-            messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err,
+            messageUi_PtBr: "Informações inválidas, verifique e tente novamente.",
+            error: err
           });
         }
 
@@ -40,7 +40,7 @@ class CampusController {
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão.",
+        messageUi_PtBr: "Desculpe, você não tem permissão. Tente novamente."
       });
     }
   }
@@ -56,8 +56,8 @@ class CampusController {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
-            messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err,
+            messageUi_PtBr: "Informações inválidas, verifique e tente novamente.",
+            error: err
           });
         }
 
@@ -69,7 +69,7 @@ class CampusController {
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão.",
+        messageUi_PtBr: "Desculpe, você não tem permissão. Tente novamente."
       });
     }
   }
@@ -86,15 +86,15 @@ class CampusController {
         if (err) {
           return res.status(400).json({
             message: "Something wrong in delete.",
-            messageUi_PtBr: "Problema na exclusão. Tente novamente!",
-            error: err,
+            messageUi_PtBr: "Ops! Problema na exclusão. Tente novamente!",
+            error: err
           });
         }
       }
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão.",
+        messageUi_PtBr: "Desculpe, você não tem permissão. Tente novamente."
       });
     }
   }
