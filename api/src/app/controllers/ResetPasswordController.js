@@ -9,35 +9,31 @@ const bcrypt = require("bcryptjs");
 class ResetPasswordController {
   async store(req, res) {
     const joiSchema = Joi.object().keys({
-      email: Joi.string()
-        .email()
-        .required()
+      email: Joi.string().email().required(),
     });
 
     joiSchema.validate(
       {
-        email: req.body.email
+        email: req.body.email,
       },
-      err => {
+      (err) => {
         if (err) {
           return res.status(400).json({
             messageUi_PtBr: "E-mail inválido, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
 
-        User.findOne({ email: req.body.email }).then(async user => {
+        User.findOne({ email: req.body.email }).then(async (user) => {
           if (!user) {
             return res.status(500).json({
               message: "User not exists.",
-              messageUi_PtBr: "Este e-mail não corresponde a nenhum usuário."
+              messageUi_PtBr: "Este e-mail não corresponde a nenhum usuário.",
             });
           }
 
           const token = crypto.randomBytes(20).toString("hex");
-          const expires = moment()
-            .add(1, "h")
-            .toISOString();
+          const expires = moment().add(1, "h").toISOString();
 
           user.passwordResetToken = token;
           user.passwordResetExpires = expires;
@@ -45,12 +41,12 @@ class ResetPasswordController {
           await user.save();
 
           await Queue.create(ResetPassword.key, {
-            user
+            user,
           }).save();
 
           return res.status(201).json({
             message: "E-mail sent.",
-            messageUi_PtBr: "E-mail enviado com sucesso!"
+            messageUi_PtBr: "E-mail enviado com sucesso!",
           });
         });
       }
@@ -59,36 +55,34 @@ class ResetPasswordController {
 
   async update(req, res) {
     const joiSchema = Joi.object().keys({
-      email: Joi.string()
-        .email()
-        .required(),
+      email: Joi.string().email().required(),
       password: Joi.string()
         .required()
         .regex(
           /(?=.*[}{,.^?~=+\-_\/*\-+.%$&\@!()#|])(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/
         ),
-      token: Joi.string().required()
+      token: Joi.string().required(),
     });
 
     joiSchema.validate(
       {
         email: req.body.email,
         password: req.body.password,
-        token: req.body.token
+        token: req.body.token,
       },
-      err => {
+      (err) => {
         if (err) {
           return res.status(400).json({
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
 
-        User.findOne({ email: req.body.email }).then(async user => {
+        User.findOne({ email: req.body.email }).then(async (user) => {
           if (!user) {
             return res.status(500).json({
               message: "User not exists.",
-              messageUi_PtBr: "Este e-mail não corresponde a nenhum usuário."
+              messageUi_PtBr: "Este e-mail não corresponde a nenhum usuário.",
             });
           }
 
@@ -96,7 +90,7 @@ class ResetPasswordController {
             return res.status(500).json({
               message: "Token invalid.",
               messageUi_PtBr:
-                "Token inválido. Solicite a redefinição de senha novamente."
+                "Token inválido. Solicite a redefinição de senha novamente.",
             });
           }
 
@@ -106,7 +100,7 @@ class ResetPasswordController {
             return res.status(500).json({
               message: "Token expired.",
               messageUi_PtBr:
-                "Token expirado. Solicite a redefinição de senha novamente."
+                "Token expirado. Solicite a redefinição de senha novamente.",
             });
           }
 
@@ -114,18 +108,18 @@ class ResetPasswordController {
           user.passwordResetToken = undefined;
           user.passwordResetExpires = undefined;
 
-          await user.save(err => {
+          await user.save((err) => {
             if (err) {
               return res.status(400).json({
                 message: "Invalid inputs.",
                 messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-                error: err
+                error: err,
               });
             }
 
             return res.status(201).json({
               message: "Password redefined success.",
-              messageUi_PtBr: "Senha redefinida com sucesso!"
+              messageUi_PtBr: "Senha redefinida com sucesso!",
             });
           });
         });

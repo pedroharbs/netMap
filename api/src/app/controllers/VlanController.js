@@ -17,12 +17,12 @@ class VlanController {
 
     if (req.body.session.level == "Administrador") {
       const verifyIp = await Vlan.findOne({
-        ip: req.body.ip
+        ip: req.body.ip,
       });
       if (verifyIp)
         return res.status(403).json({
           message: "IP already exists.",
-          messageUi_PtBr: "Desculpe, já existe uma vlan com esse IP."
+          messageUi_PtBr: "Desculpe, já existe uma vlan com esse IP.",
         });
 
       try {
@@ -33,7 +33,7 @@ class VlanController {
           message: "Invalid inputs.",
           messageUi_PtBr:
             "Endereço de IP do gateway e/ou broadcast inválido(s), verifique e tente novamente.",
-          error: err
+          error: err,
         });
       }
 
@@ -46,26 +46,26 @@ class VlanController {
         campus: req.body.campus,
         color: req.body.color,
         dhcp: req.body.dhcp,
-        vpn: req.body.vpn
+        vpn: req.body.vpn,
       });
 
-      await vlan.save(err => {
+      await vlan.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
         return res.status(201).json({
           message: "Vlan created.",
-          messageUi_PtBr: "Vlan criada com sucesso!"
+          messageUi_PtBr: "Vlan criada com sucesso!",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -79,7 +79,7 @@ class VlanController {
           message: "Invalid inputs.",
           messageUi_PtBr:
             "Endereço de IP do gateway e/ou broadcast inválido(s), verifique e tente novamente.",
-          error: err
+          error: err,
         });
       }
 
@@ -90,24 +90,25 @@ class VlanController {
       if (req.body.color) vlan.color = req.body.color;
       vlan.dhcp = req.body.dhcp;
       vlan.vpn = req.body.vpn;
+      vlan.updateAt = new Date.now();
 
-      await vlan.save(err => {
+      await vlan.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
         return res.status(200).json({
           message: "Vlan updated succesfully.",
-          messageUi_PtBr: "Vlan atualizada com sucesso!"
+          messageUi_PtBr: "Vlan atualizada com sucesso!",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -118,21 +119,21 @@ class VlanController {
         await Vlan.deleteOne({ _id: req.params.id });
         return res.status(200).json({
           message: "Vlan deleted succesfully.",
-          messageUi_PtBr: "Vlan excluída com sucesso!"
+          messageUi_PtBr: "Vlan excluída com sucesso!",
         });
       } catch (err) {
         if (err) {
           return res.status(400).json({
             message: "Something wrong in delete.",
             messageUi_PtBr: "Problema na exclusão. Tente novamente!",
-            error: err
+            error: err,
           });
         }
       }
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }

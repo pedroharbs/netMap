@@ -1,3 +1,4 @@
+const { date } = require("joi");
 const Campus = require("../models/Campus");
 
 class CampusController {
@@ -20,27 +21,27 @@ class CampusController {
       const campus = new Campus({
         name: req.body.name,
         city: req.body.city,
-        ip: req.body.ip
+        ip: req.body.ip,
       });
 
-      await campus.save(err => {
+      await campus.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
 
         return res.status(201).json({
           message: "Campus created.",
-          messageUi_PtBr: "Campus criado com sucesso!"
+          messageUi_PtBr: "Campus criado com sucesso!",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -51,25 +52,26 @@ class CampusController {
 
       campus.name = req.body.name;
       campus.city = req.body.city;
+      campus.updateAt = new Date.now();
 
-      await campus.save(err => {
+      await campus.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
 
         return res.status(200).json({
           message: "Campus updated succesfully.",
-          messageUi_PtBr: "Campus atualizado com sucesso."
+          messageUi_PtBr: "Campus atualizado com sucesso.",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -80,21 +82,21 @@ class CampusController {
         await Campus.deleteOne({ _id: req.params.id });
         return res.status(200).json({
           message: "Campus deleted succesfully.",
-          messageUi_PtBr: "Campus excluído com sucesso."
+          messageUi_PtBr: "Campus excluído com sucesso.",
         });
       } catch (err) {
         if (err) {
           return res.status(400).json({
             message: "Something wrong in delete.",
             messageUi_PtBr: "Problema na exclusão. Tente novamente!",
-            error: err
+            error: err,
           });
         }
       }
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }

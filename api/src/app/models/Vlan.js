@@ -12,9 +12,8 @@ const JoiVlanSchema = Joi.object().keys({
   color: Joi.string().required(),
   dhcp: Joi.boolean().required(),
   vpn: Joi.boolean().required(),
-  createdAt: Joi.date()
-    .required()
-    .default(Date.now, "current date")
+  createdAt: Joi.date().required().default(Date.now, "current date"),
+  updateAt: Joi.date(),
 });
 
 const VlanSchema = new mongoose.Schema(joigoose.convert(JoiVlanSchema));
