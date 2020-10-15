@@ -88,6 +88,7 @@ class ProviderController {
     provider.gateway = req.body.gateway;
     provider.broadcast = req.body.broadcast;
     provider.ipRange = req.body.ipRange;
+    provider.updateAt = new Date.now();
 
     await provider.save((err) => {
       if (err) {

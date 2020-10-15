@@ -10,9 +10,8 @@ const JoiProviderSchema = Joi.object().keys({
   gateway: Joi.string().required(),
   broadcast: Joi.string().required(),
   ipRange: Joi.array().items(Joi.string().required(), Joi.string()),
-  createdAt: Joi.date()
-    .required()
-    .default(Date.now, "current date")
+  createdAt: Joi.date().required().default(Date.now, "current date"),
+  updateAt: Joi.date(),
 });
 
 const ProviderSchema = new mongoose.Schema(joigoose.convert(JoiProviderSchema));

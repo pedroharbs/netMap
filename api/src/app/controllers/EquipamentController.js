@@ -94,6 +94,7 @@ class EquipamentController {
       equipament.portsQuant = req.body.portsQuant;
       equipament.linesQuant = req.body.linesQuant;
       equipament.firstPort = req.body.firstPort;
+      equipament.updateAt = new Date.now();
 
       await equipament.save((err) => {
         if (err) {

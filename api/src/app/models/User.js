@@ -7,14 +7,9 @@ const authConfig = require("../../config/auth");
 
 const JoiUserSchema = Joi.object().keys({
   name: Joi.string().required(),
-  recordId: Joi.string()
-    .required()
-    .min(8)
-    .max(8),
+  recordId: Joi.string().required().min(8).max(8),
   level: Joi.string().required(),
-  email: Joi.string()
-    .email()
-    .required(),
+  email: Joi.string().email().required(),
   password: Joi.string()
     .required()
     .regex(
@@ -23,9 +18,8 @@ const JoiUserSchema = Joi.object().keys({
   campuses: Joi.array().items(Joi.string()),
   passwordResetToken: Joi.string(),
   passwordResetExpires: Joi.date(),
-  createdAt: Joi.date()
-    .required()
-    .default(Date.now, "current date")
+  createdAt: Joi.date().required().default(Date.now, "current date"),
+  updateAt: Joi.date(),
 });
 
 const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema));
@@ -33,15 +27,15 @@ const UserSchema = new mongoose.Schema(joigoose.convert(JoiUserSchema));
 UserSchema.methods = {
   compareHash(password) {
     return bcrypt.compare(password, this.password);
-  }
+  },
 };
 
 UserSchema.statics = {
   generateToken({ recordId, level }) {
     return jwt.sign({ recordId, level }, authConfig.secret, {
-      expiresIn: authConfig.ttl
+      expiresIn: authConfig.ttl,
     });
-  }
+  },
 };
 
 module.exports = mongoose.model("User", UserSchema);

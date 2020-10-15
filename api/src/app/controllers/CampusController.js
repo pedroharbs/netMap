@@ -1,3 +1,4 @@
+const { date } = require("joi");
 const Campus = require("../models/Campus");
 
 class CampusController {
@@ -51,6 +52,7 @@ class CampusController {
 
       campus.name = req.body.name;
       campus.city = req.body.city;
+      campus.updateAt = new Date.now();
 
       await campus.save((err) => {
         if (err) {

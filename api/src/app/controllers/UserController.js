@@ -101,6 +101,7 @@ class UserController {
       if (req.body.password)
         user.password = await bcrypt.hash(req.body.password, 8);
       user.campuses = req.body.campuses;
+      user.updateAt = new Date.now();
 
       await user.save((err) => {
         if (err) {

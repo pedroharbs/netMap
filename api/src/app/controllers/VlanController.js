@@ -90,6 +90,7 @@ class VlanController {
       if (req.body.color) vlan.color = req.body.color;
       vlan.dhcp = req.body.dhcp;
       vlan.vpn = req.body.vpn;
+      vlan.updateAt = new Date.now();
 
       await vlan.save((err) => {
         if (err) {
