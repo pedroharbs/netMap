@@ -15,17 +15,17 @@ class ProviderController {
     return res.json(provider);
   }
 
-  async store(req, res) {
+  async create(req, res) {
     if (req.body.ip) req.body.ip = req.body.ip.split("_").join("");
 
     const verifyIp = await Provider.findOne({
-      ip: req.body.ip
+      ip: req.body.ip,
     });
     if (verifyIp)
       return res.status(403).json({
         message: "IP already exists.",
         messageUi_PtBr:
-          "Desculpe, já existe um provedor de internet com esse IP."
+          "Desculpe, já existe um provedor de internet com esse IP.",
       });
 
     try {
@@ -33,13 +33,13 @@ class ProviderController {
       req.body.gateway = block.first;
       req.body.broadcast = block.last;
       req.body.mask = block.mask;
-      req.body.ipRange = block.forEach(ip => ip);
+      req.body.ipRange = block.forEach((ip) => ip);
     } catch (err) {
       return res.status(400).json({
         message: "Invalid inputs.",
         messageUi_PtBr:
           "Endereço de IP e/ou CIDR incorreto(s), verifique e tente novamente.",
-        error: err
+        error: err,
       });
     }
 
@@ -50,21 +50,21 @@ class ProviderController {
       mask: req.body.mask,
       gateway: req.body.gateway,
       broadcast: req.body.broadcast,
-      ipRange: req.body.ipRange
+      ipRange: req.body.ipRange,
     });
 
-    await provider.save(err => {
+    await provider.save((err) => {
       if (err) {
         return res.status(400).json({
           message: "Invalid inputs.",
           messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-          error: err
+          error: err,
         });
       }
 
       return res.status(201).json({
         message: "Provider created.",
-        messageUi_PtBr: "Provedor de internet criado com sucesso!"
+        messageUi_PtBr: "Provedor de internet criado com sucesso!",
       });
     });
   }
@@ -80,7 +80,7 @@ class ProviderController {
         message: "Invalid inputs.",
         messageUi_PtBr:
           "Endereço de IP do gateway e/ou broadcast inválido(s), verifique e tente novamente.",
-        error: err
+        error: err,
       });
     }
 
@@ -89,18 +89,18 @@ class ProviderController {
     provider.broadcast = req.body.broadcast;
     provider.ipRange = req.body.ipRange;
 
-    await provider.save(err => {
+    await provider.save((err) => {
       if (err) {
         return res.status(400).json({
           message: "Invalid inputs.",
           messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-          error: err
+          error: err,
         });
       }
 
       return res.status(200).json({
         message: "Provider updated succesfully.",
-        messageUi_PtBr: "Provedor de internet atualizado com sucesso!"
+        messageUi_PtBr: "Provedor de internet atualizado com sucesso!",
       });
     });
   }
@@ -110,14 +110,14 @@ class ProviderController {
       await Provider.deleteOne({ _id: req.params.id });
       return res.status(200).json({
         message: "Provider deleted succesfully.",
-        messageUi_PtBr: "Provedor de internet excluído com sucesso!"
+        messageUi_PtBr: "Provedor de internet excluído com sucesso!",
       });
     } catch (err) {
       if (err) {
         return res.status(400).json({
           message: "Something wrong in delete.",
           messageUi_PtBr: "Problema na exclusão. Tente novamente!",
-          error: err
+          error: err,
         });
       }
     }

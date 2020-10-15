@@ -5,7 +5,7 @@ class UserController {
   async index(req, res) {
     const users = await User.find({}, "recordId name email level")
       .nor({
-        recordId: req.body.session.recordId
+        recordId: req.body.session.recordId,
       })
       .populate({ path: "campuses", model: "Campus" });
 
@@ -14,28 +14,28 @@ class UserController {
 
   async getByRecordId(req, res) {
     const user = await User.findOne({
-      recordId: req.params.recordId || req.body.session.recordId
+      recordId: req.params.recordId || req.body.session.recordId,
     });
     user.password = undefined;
     return res.json(user);
   }
 
-  async store(req, res) {
+  async create(req, res) {
     if (req.body.isFirstAcess || req.body.session.level == "Administrador") {
       const verifyRecordId = await User.findOne({
-        recordId: req.body.recordId
+        recordId: req.body.recordId,
       });
       if (verifyRecordId)
         return res.status(403).json({
           message: "User already exists.",
-          messageUi_PtBr: "Desculpe, este prontuário já está cadastrado."
+          messageUi_PtBr: "Desculpe, este prontuário já está cadastrado.",
         });
 
       const verifyEmail = await User.findOne({ email: req.body.email });
       if (verifyEmail)
         return res.status(403).json({
           message: "User already exists.",
-          messageUi_PtBr: "Desculpe, este e-mail já está cadastrado."
+          messageUi_PtBr: "Desculpe, este e-mail já está cadastrado.",
         });
 
       const user = new User({
@@ -46,26 +46,26 @@ class UserController {
         password: req.body.password
           ? await bcrypt.hash(req.body.password, 8)
           : "",
-        campuses: req.body.campuses
+        campuses: req.body.campuses,
       });
 
-      await user.save(err => {
+      await user.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
         return res.status(201).json({
           message: "User created.",
-          messageUi_PtBr: "Usuário criado com sucesso!"
+          messageUi_PtBr: "Usuário criado com sucesso!",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -80,7 +80,7 @@ class UserController {
         if (user)
           return res.status(403).json({
             message: "User already exists.",
-            messageUi_PtBr: "Desculpe, este prontuário já está cadastrado."
+            messageUi_PtBr: "Desculpe, este prontuário já está cadastrado.",
           });
       }
 
@@ -91,7 +91,7 @@ class UserController {
         if (user)
           return res.status(403).json({
             message: "User already exists.",
-            messageUi_PtBr: "Desculpe, este e-mail já está cadastrado."
+            messageUi_PtBr: "Desculpe, este e-mail já está cadastrado.",
           });
       }
 
@@ -102,23 +102,23 @@ class UserController {
         user.password = await bcrypt.hash(req.body.password, 8);
       user.campuses = req.body.campuses;
 
-      await user.save(err => {
+      await user.save((err) => {
         if (err) {
           return res.status(400).json({
             message: "Invalid inputs.",
             messageUi_PtBr: "Dados inválidos, verifique e tente novamente.",
-            error: err
+            error: err,
           });
         }
         return res.status(200).json({
           message: "User updated succesfully.",
-          messageUi_PtBr: "Usuário atualizado com sucesso!"
+          messageUi_PtBr: "Usuário atualizado com sucesso!",
         });
       });
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }
@@ -129,21 +129,21 @@ class UserController {
         await User.deleteOne({ recordId: req.params.recordId });
         return res.status(200).json({
           message: "User deleted succesfully.",
-          messageUi_PtBr: "Usuário excluído com sucesso!"
+          messageUi_PtBr: "Usuário excluído com sucesso!",
         });
       } catch (err) {
         if (err) {
           return res.status(400).json({
             message: "Something wrong in delete.",
             messageUi_PtBr: "Problema na exclusão. Tente novamente!",
-            error: err
+            error: err,
           });
         }
       }
     } else {
       return res.status(401).json({
         message: "Permission denied.",
-        messageUi_PtBr: "Desculpe, você não tem permissão."
+        messageUi_PtBr: "Desculpe, você não tem permissão.",
       });
     }
   }

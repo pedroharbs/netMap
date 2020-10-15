@@ -1,19 +1,19 @@
 const User = require("../models/User");
 
 class SessionController {
-  store(req, res) {
-    User.findOne({ recordId: req.body.recordId }).then(async user => {
+  create(req, res) {
+    User.findOne({ recordId: req.body.recordId }).then(async (user) => {
       if (user === null) {
         return res.status(500).json({
           message: "Wrong record. Permission denied.",
-          messageUi_PtBr: "Prontuário inválido! Verifique e tente novamente."
+          messageUi_PtBr: "Prontuário inválido! Verifique e tente novamente.",
         });
       } else {
         const validHash = await user.compareHash(req.body.password);
         if (!validHash) {
           return res.status(500).json({
             message: "Wrong password. Permission denied.",
-            messageUi_PtBr: "Senha inválida! Verifique e tente novamente."
+            messageUi_PtBr: "Senha inválida! Verifique e tente novamente.",
           });
         }
 
@@ -21,7 +21,7 @@ class SessionController {
           auth: true,
           token: User.generateToken(user),
           message: "Login successful!",
-          messageUi_PtBr: "Autenticação bem sucedida!"
+          messageUi_PtBr: "Autenticação bem sucedida!",
         });
       }
     });
