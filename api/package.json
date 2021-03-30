@@ -24,7 +24,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.14",
     "mongoose-paginate": "^5.0.3",
-    "netmask": "^1.0.6",
+    "netmask": "^2.0.1",
     "nodemailer": "^6.3.1",
     "nodemailer-express-handlebars": "^3.1.0",
     "require-dir": "^1.2.0",
